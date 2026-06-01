@@ -34,6 +34,16 @@ export function CloudSyncGate() {
     const onHydrated = () => {
       if (!sessionStorage.getItem(RELOADED_FLAG)) {
         sessionStorage.setItem(RELOADED_FLAG, '1')
+        // The daily-queue snapshot freezes once per day on first render — on a
+        // fresh device that can happen BEFORE sync finishes hydrating, leaving
+        // the count stuck at the pre-hydrate default. Clear today's snapshot so
+        // it rebuilds from the now-complete data on reload (done once, so the
+        // count still burns down normally as problems get rated afterward).
+        try {
+          const d = new Date()
+          const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+          localStorage.removeItem(`patterns:queue:${iso}`)
+        } catch { /* ignore */ }
         window.location.reload()
       }
     }
