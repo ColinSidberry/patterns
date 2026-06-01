@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { CodeBlock } from './StudyViewer/CodeBlock'
 import { QuestionRenderer } from './StudyViewer/QuestionRenderer'
+import codexManifest from '@/lib/codex-manifest.json'
 
 interface SentenceTimestamp {
   index: number
@@ -157,13 +158,20 @@ export function CodexChapterReader({ slug }: Props) {
   // localStorage has been written for this slug).
   const hasAppliedDefaultsRef = useRef(false)
 
-  const audioUrl = `/api/codex-audio/${encodeURIComponent(slug)}`
-  const timestampsUrl = `/api/codex-audio/${encodeURIComponent(slug)}/timestamps`
+  // Chapter assets live in Vercel Blob (public), keyed by slug in the committed
+  // codex-manifest.json. This replaces the old dev-only /api/codex-audio routes
+  // that read from the local Obsidian vault and 404'd on the deployed site.
+  const manifestEntry = (codexManifest as Record<string, { audioUrl: string; timestampsUrl: string }>)[slug]
+  const audioUrl = manifestEntry?.audioUrl ?? ''
+  const timestampsUrl = manifestEntry?.timestampsUrl ?? ''
 
   // Fetch timestamps JSON on mount.
   useEffect(() => {
     void (async () => {
       try {
+        if (!timestampsUrl) {
+          throw new Error(`No published chapter for "${slug}".`)
+        }
         const res = await fetch(timestampsUrl)
         if (!res.ok) {
           const body = await res.json().catch(() => ({}))
