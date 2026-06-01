@@ -1,0 +1,23 @@
+# trajectory for remove_duplicates (totalSteps=20)
+# format: step N | cells=[...] | pointers=name@idx,...
+# linked-list cell notation: (X)=sentinel, ~X=null-cap
+step  0 | cells=[0,0,1,1,1,2,2] | pointers=slow@0
+step  1 | cells=[0,0,1,1,1,2,2] | pointers=fast@0,slow@0
+step  2 | cells=[0,0,1,1,1,2,2] | pointers=fast@0,slow@0
+step  3 | cells=[0,0,1,1,1,2,2] | pointers=fast@1,slow@0
+step  4 | cells=[0,0,1,1,1,2,2] | pointers=fast@1,slow@0
+step  5 | cells=[0,0,1,1,1,2,2] | pointers=fast@2,slow@0
+step  6 | cells=[0,0,1,1,1,2,2] | pointers=fast@2,slow@1
+step  7 | cells=[0,1,1,1,1,2,2] | pointers=fast@2,slow@1
+step  8 | cells=[0,1,1,1,1,2,2] | pointers=fast@2,slow@1
+step  9 | cells=[0,1,1,1,1,2,2] | pointers=fast@3,slow@1
+step 10 | cells=[0,1,1,1,1,2,2] | pointers=fast@3,slow@1
+step 11 | cells=[0,1,1,1,1,2,2] | pointers=fast@4,slow@1
+step 12 | cells=[0,1,1,1,1,2,2] | pointers=fast@4,slow@1
+step 13 | cells=[0,1,1,1,1,2,2] | pointers=fast@5,slow@1
+step 14 | cells=[0,1,1,1,1,2,2] | pointers=fast@5,slow@2
+step 15 | cells=[0,1,2,1,1,2,2] | pointers=fast@5,slow@2
+step 16 | cells=[0,1,2,1,1,2,2] | pointers=fast@5,slow@2
+step 17 | cells=[0,1,2,1,1,2,2] | pointers=fast@6,slow@2
+step 18 | cells=[0,1,2,1,1,2,2] | pointers=fast@6,slow@2
+step 19 | cells=[0,1,2,1,1,2,2] | pointers=slow@2

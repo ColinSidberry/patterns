@@ -1,0 +1,190 @@
+# trajectory for rotting_oranges (totalSteps=187)
+# format: step N | cells=[...] | pointers=name@idx,...
+# linked-list cell notation: (X)=sentinel, ~X=null-cap
+step  0 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=
+step  1 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=
+step  2 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=
+step  3 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=0
+step  4 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=0
+step  5 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=0
+step  6 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=0
+step  7 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=0
+step  8 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=1
+step  9 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=1
+step 10 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=2
+step 11 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=2
+step 12 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=2
+step 13 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=2
+step 14 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=3
+step 15 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=3
+step 16 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=4
+step 17 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=4
+step 18 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=4
+step 19 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=4
+step 20 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=4
+step 21 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=4
+step 22 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=4
+step 23 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=4
+step 24 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=5
+step 25 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=5
+step 26 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=6
+step 27 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=6
+step 28 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=6
+step 29 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=6
+step 30 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=6,Minutes=0
+step 31 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=6,Minutes=0
+step 32 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=6,Minutes=0
+step 33 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=6,Minutes=0
+step 34 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=6,Minutes=0
+step 35 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=Fresh=6,Minutes=0
+step 36 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=rots@(1,0) | Fresh=6,Minutes=0
+step 37 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=rots@(1,0) | Fresh=6,Minutes=0
+step 38 | cells=[[2,1,1],[1,1,0],[0,1,1]] | pointers=rots@(1,0) | Fresh=6,Minutes=0
+step 39 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=rots@(1,0) | Fresh=6,Minutes=0
+step 40 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=rots@(1,0) | Fresh=5,Minutes=0
+step 41 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=rots@(1,0) | Fresh=5,Minutes=0
+step 42 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=Fresh=5,Minutes=0
+step 43 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=Fresh=5,Minutes=0
+step 44 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=Fresh=5,Minutes=0
+step 45 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=Fresh=5,Minutes=0
+step 46 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=Fresh=5,Minutes=0
+step 47 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=rots@(0,1) | Fresh=5,Minutes=0
+step 48 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=rots@(0,1) | Fresh=5,Minutes=0
+step 49 | cells=[[2,1,1],[2,1,0],[0,1,1]] | pointers=rots@(0,1) | Fresh=5,Minutes=0
+step 50 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=rots@(0,1) | Fresh=5,Minutes=0
+step 51 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=rots@(0,1) | Fresh=4,Minutes=0
+step 52 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=rots@(0,1) | Fresh=4,Minutes=0
+step 53 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=0
+step 54 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=0
+step 55 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=0
+step 56 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=0
+step 57 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=0
+step 58 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=0
+step 59 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=1
+step 60 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=1
+step 61 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=1
+step 62 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=rots@(2,0) | Fresh=4,Minutes=1
+step 63 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=rots@(2,0) | Fresh=4,Minutes=1
+step 64 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=1
+step 65 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=1
+step 66 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=rots@(0,0) | Fresh=4,Minutes=1
+step 67 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=rots@(0,0) | Fresh=4,Minutes=1
+step 68 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=1
+step 69 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=Fresh=4,Minutes=1
+step 70 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=rots@(1,1) | Fresh=4,Minutes=1
+step 71 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=rots@(1,1) | Fresh=4,Minutes=1
+step 72 | cells=[[2,2,1],[2,1,0],[0,1,1]] | pointers=rots@(1,1) | Fresh=4,Minutes=1
+step 73 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=rots@(1,1) | Fresh=4,Minutes=1
+step 74 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=rots@(1,1) | Fresh=3,Minutes=1
+step 75 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=rots@(1,1) | Fresh=3,Minutes=1
+step 76 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 77 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 78 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 79 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 80 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 81 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 82 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 83 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 84 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 85 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=rots@(1,1) | Fresh=3,Minutes=1
+step 86 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=rots@(1,1) | Fresh=3,Minutes=1
+step 87 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 88 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 89 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 90 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 91 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=Fresh=3,Minutes=1
+step 92 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=rots@(0,2) | Fresh=3,Minutes=1
+step 93 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=rots@(0,2) | Fresh=3,Minutes=1
+step 94 | cells=[[2,2,1],[2,2,0],[0,1,1]] | pointers=rots@(0,2) | Fresh=3,Minutes=1
+step 95 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=rots@(0,2) | Fresh=3,Minutes=1
+step 96 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=rots@(0,2) | Fresh=2,Minutes=1
+step 97 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=rots@(0,2) | Fresh=2,Minutes=1
+step 98 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=Fresh=2,Minutes=1
+step 99 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=Fresh=2,Minutes=1
+step 100 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=rots@(0,0) | Fresh=2,Minutes=1
+step 101 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=rots@(0,0) | Fresh=2,Minutes=1
+step 102 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=Fresh=2,Minutes=1
+step 103 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=Fresh=2,Minutes=1
+step 104 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=Fresh=2,Minutes=1
+step 105 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=Fresh=2,Minutes=2
+step 106 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=Fresh=2,Minutes=2
+step 107 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=Fresh=2,Minutes=2
+step 108 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=rots@(2,1) | Fresh=2,Minutes=2
+step 109 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=rots@(2,1) | Fresh=2,Minutes=2
+step 110 | cells=[[2,2,2],[2,2,0],[0,1,1]] | pointers=rots@(2,1) | Fresh=2,Minutes=2
+step 111 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(2,1) | Fresh=2,Minutes=2
+step 112 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(2,1) | Fresh=1,Minutes=2
+step 113 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(2,1) | Fresh=1,Minutes=2
+step 114 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 115 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 116 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(0,1) | Fresh=1,Minutes=2
+step 117 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(0,1) | Fresh=1,Minutes=2
+step 118 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 119 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 120 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(1,2) | Fresh=1,Minutes=2
+step 121 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(1,2) | Fresh=1,Minutes=2
+step 122 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 123 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 124 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(1,0) | Fresh=1,Minutes=2
+step 125 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(1,0) | Fresh=1,Minutes=2
+step 126 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 127 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 128 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 129 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 130 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 131 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 132 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(1,2) | Fresh=1,Minutes=2
+step 133 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(1,2) | Fresh=1,Minutes=2
+step 134 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 135 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 136 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 137 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 138 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 139 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 140 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 141 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 142 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(0,1) | Fresh=1,Minutes=2
+step 143 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(0,1) | Fresh=1,Minutes=2
+step 144 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 145 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 146 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=2
+step 147 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=3
+step 148 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=3
+step 149 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=3
+step 150 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=3
+step 151 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=3
+step 152 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=3
+step 153 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(1,1) | Fresh=1,Minutes=3
+step 154 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(1,1) | Fresh=1,Minutes=3
+step 155 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=3
+step 156 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=Fresh=1,Minutes=3
+step 157 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(2,2) | Fresh=1,Minutes=3
+step 158 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(2,2) | Fresh=1,Minutes=3
+step 159 | cells=[[2,2,2],[2,2,0],[0,2,1]] | pointers=rots@(2,2) | Fresh=1,Minutes=3
+step 160 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=rots@(2,2) | Fresh=1,Minutes=3
+step 161 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=rots@(2,2) | Fresh=0,Minutes=3
+step 162 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=rots@(2,2) | Fresh=0,Minutes=3
+step 163 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=3
+step 164 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=3
+step 165 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=rots@(2,0) | Fresh=0,Minutes=3
+step 166 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=rots@(2,0) | Fresh=0,Minutes=3
+step 167 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=3
+step 168 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=3
+step 169 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=3
+step 170 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 171 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 172 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 173 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 174 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 175 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 176 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=rots@(1,2) | Fresh=0,Minutes=4
+step 177 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=rots@(1,2) | Fresh=0,Minutes=4
+step 178 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 179 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 180 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 181 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 182 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 183 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=rots@(2,1) | Fresh=0,Minutes=4
+step 184 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=rots@(2,1) | Fresh=0,Minutes=4
+step 185 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4
+step 186 | cells=[[2,2,2],[2,2,0],[0,2,2]] | pointers=Fresh=0,Minutes=4

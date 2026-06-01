@@ -1,0 +1,835 @@
+{
+  "patterns": [
+    {
+      "id": "two-pointers-opposite",
+      "name": "Two Pointers — Opposite Ends",
+      "module": "Two Pointers",
+      "scaffold": "iterative",
+      "shortDescription": "Two pointers starting at both ends, converging toward the middle",
+      "whenToUse": "Sorted array, palindrome check, reverse in place, pair sum on sorted input",
+      "algoMasterRef": "two_pointers_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "left=0, right=last index" },
+        { "key": "TRAVERSE", "label": "while (left < right)" },
+        { "key": "[COMPARE]", "label": "compare or process arr[left] and arr[right]", "kind": "variable" },
+        { "key": "advance", "label": "move left++ or right-- based on logic", "kind": "scaffold" },
+        { "key": "RETURN", "label": "final answer" }
+      ],
+      "skeleton": "function fn(arr) {\n  let left = 0;\n  let right = arr.length - 1;\n  while (left < right) {\n    // compare arr[left], arr[right]\n    // left++ and/or right--\n  }\n  return /* result */;\n}",
+      "memberProblems": ["is_palindrome", "reversing_strings", "container_with_most_water", "valid_palindrome"]
+    },
+    {
+      "id": "two-pointers-same-direction",
+      "name": "Two Pointers — Same Direction (Slow/Fast)",
+      "module": "Two Pointers",
+      "scaffold": "iterative",
+      "shortDescription": "Slow read pointer + fast write pointer (or different speeds), both moving forward",
+      "whenToUse": "In-place array filtering/dedup, reading at one rate while writing at another, cycle detection",
+      "algoMasterRef": "two_pointers_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "slow=0; fast=0 (or different rates)" },
+        { "key": "TRAVERSE", "label": "for (fast = 0; fast < n; fast++)" },
+        { "key": "[DECIDE]", "label": "decide whether to keep current fast value", "kind": "variable" },
+        { "key": "write+advance", "label": "if keep, write to slow position; advance slow", "kind": "scaffold" },
+        { "key": "RETURN", "label": "return slow (often new length or transformed value)" }
+      ],
+      "skeleton": "function fn(arr) {\n  let slow = 0;\n  for (let fast = 0; fast < arr.length; fast++) {\n    if (/* keep arr[fast] */) {\n      arr[slow] = arr[fast];\n      slow++;\n    }\n  }\n  return slow;\n}",
+      "memberProblems": ["remove_element", "remove_vowels", "string_compression"]
+    },
+    {
+      "id": "two-pointers-merge",
+      "name": "Two Pointers — Merge",
+      "module": "Two Pointers",
+      "scaffold": "iterative",
+      "shortDescription": "Two pointers across two sorted inputs, advancing whichever is smaller",
+      "whenToUse": "Merging sorted arrays/lists, intersection/union of sorted sequences",
+      "slots": [
+        { "key": "INITIALIZE", "label": "i, j for each input; result array" },
+        { "key": "TRAVERSE", "label": "while both have elements" },
+        { "key": "[COMPARE]", "label": "take smaller into result", "kind": "variable" },
+        { "key": "advance", "label": "advance the chosen pointer", "kind": "scaffold" },
+        { "key": "drain", "label": "append leftovers from non-empty side", "kind": "scaffold" },
+        { "key": "RETURN", "label": "merged result" }
+      ],
+      "skeleton": "function fn(a, b) {\n  const result = [];\n  let i = 0, j = 0;\n  while (i < a.length && j < b.length) {\n    if (a[i] <= b[j]) result.push(a[i++]);\n    else result.push(b[j++]);\n  }\n  while (i < a.length) result.push(a[i++]);\n  while (j < b.length) result.push(b[j++]);\n  return result;\n}",
+      "memberProblems": ["merge_sorted_arrays", "intersection_of_arrays"]
+    },
+
+    {
+      "id": "sliding-window-variable",
+      "name": "Sliding Window — Variable Size",
+      "module": "Sliding Window",
+      "scaffold": "iterative",
+      "shortDescription": "Window expands by moving right, shrinks by moving left when invariant violated",
+      "whenToUse": "Longest/shortest substring with constraint, max sum subarray with constraint",
+      "slots": [
+        { "key": "INITIALIZE", "label": "window state (map/sum/etc), left=0, best result" },
+        { "key": "TRAVERSE", "label": "for right in range" },
+        { "key": "[EXPAND]", "label": "add arr[right] to window state", "kind": "variable" },
+        { "key": "shrink", "label": "while invariant violated, remove arr[left] and left++", "kind": "scaffold" },
+        { "key": "[TRACK]", "label": "update best result with current window", "kind": "variable" },
+        { "key": "RETURN", "label": "best result" }
+      ],
+      "skeleton": "function fn(arr) {\n  let left = 0, best = 0;\n  /* window state */\n  for (let right = 0; right < arr.length; right++) {\n    // add arr[right] to window\n    while (/* invariant violated */) {\n      // remove arr[left] from window\n      left++;\n    }\n    best = Math.max(best, right - left + 1);\n  }\n  return best;\n}",
+      "memberProblems": ["longest_substring_without_repeating_characters", "minimum_window", "fruit_into"]
+    },
+    {
+      "id": "sliding-window-fixed",
+      "name": "Sliding Window — Fixed Size k",
+      "module": "Sliding Window",
+      "scaffold": "iterative",
+      "shortDescription": "Window of fixed size k slides across the array; maintain rolling stat",
+      "whenToUse": "Max/min/sum of every contiguous subarray of size k",
+      "slots": [
+        { "key": "INITIALIZE", "label": "build first window of size k; capture initial stat" },
+        { "key": "TRAVERSE", "label": "for r=k...n" },
+        { "key": "[SLIDE]", "label": "add arr[r], remove arr[r-k]", "kind": "variable" },
+        { "key": "[TRACK]", "label": "update best with new window's stat", "kind": "variable" },
+        { "key": "RETURN", "label": "best result" }
+      ],
+      "skeleton": "function fn(arr, k) {\n  let sum = 0;\n  for (let i = 0; i < k; i++) sum += arr[i];\n  let best = sum;\n  for (let r = k; r < arr.length; r++) {\n    sum += arr[r] - arr[r - k];\n    best = Math.max(best, sum);\n  }\n  return best;\n}",
+      "memberProblems": ["subarray_sum_fixed", "max_consecutive"]
+    },
+
+    {
+      "id": "hash-map-frequency",
+      "name": "Hash Map — Frequency Counter",
+      "module": "Hash Tables",
+      "scaffold": "iterative",
+      "shortDescription": "Build a Map of element → count; query the map",
+      "whenToUse": "Anagram check, character frequency, finding most/least common",
+      "algoMasterRef": "hashmap_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "empty Map" },
+        { "key": "TRAVERSE", "label": "for-of input" },
+        { "key": "[COUNT]", "label": "increment count for each element", "kind": "variable" },
+        { "key": "query", "label": "iterate map to derive answer", "kind": "scaffold" },
+        { "key": "RETURN", "label": "result" }
+      ],
+      "skeleton": "function fn(items) {\n  const counts = new Map();\n  for (const item of items) {\n    counts.set(item, (counts.get(item) || 0) + 1);\n  }\n  // derive answer from counts\n  return /* result */;\n}",
+      "memberProblems": ["count_frequencies", "is_anagram", "valid_anagram", "first_unique_character", "sort_by_frequency"]
+    },
+    {
+      "id": "hash-set-membership",
+      "name": "Hash Set — Membership Check",
+      "module": "Hash Tables",
+      "scaffold": "iterative",
+      "shortDescription": "Build a Set of seen items; check membership in O(1)",
+      "whenToUse": "Detect duplicates, set intersection/union, check if element exists",
+      "slots": [
+        { "key": "INITIALIZE", "label": "empty Set" },
+        { "key": "TRAVERSE", "label": "for-of input" },
+        { "key": "[CHECK]", "label": "check has(); add to set", "kind": "variable" },
+        { "key": "RETURN", "label": "result (often early exit on hit)" }
+      ],
+      "skeleton": "function fn(items) {\n  const seen = new Set();\n  for (const item of items) {\n    if (seen.has(item)) return true;\n    seen.add(item);\n  }\n  return false;\n}",
+      "memberProblems": ["contains_duplicate", "intersection_of_arrays", "happy_number"]
+    },
+    {
+      "id": "hash-map-complement",
+      "name": "Hash Map — Complement Lookup",
+      "module": "Hash Tables",
+      "scaffold": "iterative",
+      "shortDescription": "For each item, look up its complement (target - item) in the map",
+      "whenToUse": "Two Sum and variants — pair-finding where you know what to look for",
+      "slots": [
+        { "key": "INITIALIZE", "label": "empty Map of value → index" },
+        { "key": "TRAVERSE", "label": "for each item" },
+        { "key": "[COMPLEMENT]", "label": "compute complement; check map", "kind": "variable" },
+        { "key": "store", "label": "if not found, store current value", "kind": "scaffold" },
+        { "key": "RETURN", "label": "result or null" }
+      ],
+      "skeleton": "function fn(arr, target) {\n  const seen = new Map();\n  for (let i = 0; i < arr.length; i++) {\n    const need = target - arr[i];\n    if (seen.has(need)) return [seen.get(need), i];\n    seen.set(arr[i], i);\n  }\n  return null;\n}",
+      "memberProblems": ["two_sum", "twitter_oa_k_difference"]
+    },
+
+    {
+      "id": "stack-matching",
+      "name": "Stack — Matching/Validation",
+      "module": "Stack",
+      "scaffold": "iterative",
+      "shortDescription": "Push openers; pop and check match on closers",
+      "whenToUse": "Brackets/parentheses validation, undo operations",
+      "algoMasterRef": "stack_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "empty stack; map of pairs if needed" },
+        { "key": "TRAVERSE", "label": "for-of input" },
+        { "key": "[MATCH]", "label": "if opener push; if closer pop and verify", "kind": "variable" },
+        { "key": "RETURN", "label": "stack.length === 0 (or other final check)" }
+      ],
+      "skeleton": "function fn(s) {\n  const pairs = { ')': '(', ']': '[', '}': '{' };\n  const stack = [];\n  for (const ch of s) {\n    if (ch in pairs) {\n      if (stack.pop() !== pairs[ch]) return false;\n    } else {\n      stack.push(ch);\n    }\n  }\n  return stack.length === 0;\n}",
+      "memberProblems": ["valid_parentheses", "remove_adjacent_duplicates_in_string", "backspace_string_compare"]
+    },
+    {
+      "id": "stack-monotonic",
+      "name": "Stack — Monotonic",
+      "module": "Stack",
+      "scaffold": "iterative",
+      "shortDescription": "Maintain stack in monotonic order; pop while invariant violated",
+      "whenToUse": "Next greater/smaller element, daily temperatures, largest rectangle, span problems",
+      "algoMasterRef": "mono_stack_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "empty stack; result array" },
+        { "key": "TRAVERSE", "label": "for each index in input" },
+        { "key": "evict", "label": "while stack top violates monotonic order, pop", "kind": "scaffold" },
+        { "key": "[RECORD]", "label": "record result for popped index", "kind": "variable" },
+        { "key": "push", "label": "push current index", "kind": "scaffold" },
+        { "key": "RETURN", "label": "result derived from pop events" }
+      ],
+      "skeleton": "function fn(arr) {\n  const result = new Array(arr.length).fill(0);\n  const stack = [];\n  for (let i = 0; i < arr.length; i++) {\n    while (stack.length && arr[stack[stack.length - 1]] < arr[i]) {\n      const j = stack.pop();\n      result[j] = i - j;\n    }\n    stack.push(i);\n  }\n  return result;\n}",
+      "memberProblems": ["daily_temperatures", "next_greater", "shopkeeper_sale", "twitter_oa_final_discounted_price"]
+    },
+
+    {
+      "id": "linked-list-predecessor",
+      "name": "Linked List — Dummy + Predecessor",
+      "module": "Linked List",
+      "scaffold": "iterative",
+      "shortDescription": "Use dummy head + curr-as-predecessor pattern; check curr.next, mutate or advance",
+      "whenToUse": "Delete nodes, insert nodes, any operation that needs the node BEFORE the target",
+      "slots": [
+        { "key": "INITIALIZE", "label": "dummy = { val: 0, next: head }; curr = dummy" },
+        { "key": "TRAVERSE", "label": "while (curr.next !== null)" },
+        { "key": "[CHECK]", "label": "if curr.next satisfies condition", "kind": "variable" },
+        { "key": "splice", "label": "curr.next = curr.next.next", "kind": "scaffold" },
+        { "key": "advance", "label": "else curr = curr.next", "kind": "scaffold" },
+        { "key": "RETURN", "label": "return dummy.next" }
+      ],
+      "skeleton": "function fn(head) {\n  const dummy = { val: 0, next: head };\n  let curr = dummy;\n  while (curr.next !== null) {\n    if (/* condition on curr.next */) {\n      curr.next = curr.next.next;\n    } else {\n      curr = curr.next;\n    }\n  }\n  return dummy.next;\n}",
+      "memberProblems": ["delete_all_occurrences", "remove_linked_list_elements"]
+    },
+    {
+      "id": "linked-list-two-pointers",
+      "name": "Linked List — Two Pointers (Slow/Fast)",
+      "module": "Linked List",
+      "scaffold": "iterative",
+      "shortDescription": "Slow advances 1 step, fast advances 2 — Floyd's cycle detection style",
+      "whenToUse": "Cycle detection, find middle, find nth from end",
+      "slots": [
+        { "key": "INITIALIZE", "label": "slow = head, fast = head (or dummy)" },
+        { "key": "TRAVERSE", "label": "while (fast && fast.next)" },
+        { "key": "advance", "label": "slow = slow.next; fast = fast.next.next", "kind": "scaffold" },
+        { "key": "[DECIDE]", "label": "check meeting condition or pointer state", "kind": "variable" },
+        { "key": "RETURN", "label": "slow (or derived value)" }
+      ],
+      "skeleton": "function fn(head) {\n  let slow = head;\n  let fast = head;\n  while (fast && fast.next) {\n    slow = slow.next;\n    fast = fast.next.next;\n    if (slow === fast) return /* cycle/middle/etc */;\n  }\n  return slow;\n}",
+      "memberProblems": ["middle_of", "cycle", "remove_nth_node"]
+    },
+    {
+      "id": "linked-list-reverse",
+      "name": "Linked List — Reverse In-Place",
+      "module": "Linked List",
+      "scaffold": "iterative",
+      "shortDescription": "Iterate with prev/curr/next; flip pointer each step",
+      "whenToUse": "Reverse a list, reverse sub-list, reorder list",
+      "slots": [
+        { "key": "INITIALIZE", "label": "prev = null; curr = head" },
+        { "key": "TRAVERSE", "label": "while (curr !== null)" },
+        { "key": "capture next", "label": "const next = curr.next", "kind": "scaffold" },
+        { "key": "[REVERSE]", "label": "curr.next = prev (or swap prev/next for doubly-linked)", "kind": "variable" },
+        { "key": "advance", "label": "prev = curr; curr = next", "kind": "scaffold" },
+        { "key": "RETURN", "label": "return prev (the new head)" }
+      ],
+      "skeleton": "function fn(head) {\n  let prev = null;\n  let curr = head;\n  while (curr !== null) {\n    const next = curr.next;\n    curr.next = prev;\n    prev = curr;\n    curr = next;\n  }\n  return prev;\n}",
+      "memberProblems": ["reverse_linked_list", "reverse_doubly_linked_list"]
+    },
+
+    {
+      "id": "binary-search-standard",
+      "name": "Binary Search — Standard",
+      "module": "Binary Search",
+      "scaffold": "iterative",
+      "shortDescription": "Find an exact value (or report not found) in a sorted array",
+      "whenToUse": "Sorted array; need to find a specific value or position",
+      "algoMasterRef": "binary_search_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "lo = 0, hi = arr.length - 1" },
+        { "key": "TRAVERSE", "label": "while (lo <= hi)" },
+        { "key": "mid", "label": "mid = Math.floor((lo + hi) / 2)", "kind": "scaffold" },
+        { "key": "[COMPARE]", "label": "if equal return; if less lo = mid+1; else hi = mid-1", "kind": "variable" },
+        { "key": "RETURN", "label": "return -1 (not found)" }
+      ],
+      "skeleton": "function fn(arr, target) {\n  let lo = 0, hi = arr.length - 1;\n  while (lo <= hi) {\n    const mid = Math.floor((lo + hi) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) lo = mid + 1;\n    else hi = mid - 1;\n  }\n  return -1;\n}",
+      "memberProblems": ["binary_search_intro"]
+    },
+    {
+      "id": "binary-search-boundary",
+      "name": "Binary Search — Boundary (First True)",
+      "module": "Binary Search",
+      "scaffold": "iterative",
+      "shortDescription": "Find the first index where a predicate becomes true (or last where it's false)",
+      "whenToUse": "First/last occurrence, leftmost/rightmost insertion point, transition point",
+      "slots": [
+        { "key": "INITIALIZE", "label": "lo = 0, hi = arr.length (note: not arr.length - 1)" },
+        { "key": "TRAVERSE", "label": "while (lo < hi)" },
+        { "key": "mid", "label": "mid = Math.floor((lo + hi) / 2)", "kind": "scaffold" },
+        { "key": "[PREDICATE]", "label": "if predicate(mid) hi = mid; else lo = mid + 1", "kind": "variable" },
+        { "key": "RETURN", "label": "return lo (the boundary)" }
+      ],
+      "skeleton": "function fn(arr) {\n  let lo = 0, hi = arr.length;\n  while (lo < hi) {\n    const mid = Math.floor((lo + hi) / 2);\n    if (/* predicate(arr[mid]) */) hi = mid;\n    else lo = mid + 1;\n  }\n  return lo;\n}",
+      "memberProblems": ["binary_search_boundary", "binary_search_first_element_not_smaller_than_target"]
+    },
+    {
+      "id": "binary-search-answer-space",
+      "name": "Binary Search — On Answer Space",
+      "module": "Binary Search",
+      "scaffold": "iterative",
+      "shortDescription": "Binary search over the answer values themselves; check feasibility at mid",
+      "whenToUse": "Capacity-style problems: find min/max value such that feasibility check passes",
+      "slots": [
+        { "key": "INITIALIZE", "label": "lo, hi = bounds of possible answers" },
+        { "key": "TRAVERSE", "label": "while (lo < hi)" },
+        { "key": "mid", "label": "mid = candidate answer", "kind": "scaffold" },
+        { "key": "[FEASIBILITY]", "label": "if feasible(mid) hi = mid; else lo = mid + 1", "kind": "variable" },
+        { "key": "RETURN", "label": "return lo (smallest feasible)" }
+      ],
+      "skeleton": "function fn(input) {\n  let lo = /* min answer */;\n  let hi = /* max answer */;\n  const feasible = (val) => /* check if val works */;\n  while (lo < hi) {\n    const mid = Math.floor((lo + hi) / 2);\n    if (feasible(mid)) hi = mid;\n    else lo = mid + 1;\n  }\n  return lo;\n}",
+      "memberProblems": ["capacity_to_ship_packages", "koko_eating_bananas", "google_oa_max_area_serving_cake"]
+    },
+
+    {
+      "id": "tree-dfs-recursive",
+      "name": "Tree — DFS (Recursive)",
+      "module": "Trees",
+      "scaffold": "recursive",
+      "shortDescription": "Recursive function processes a node, then recurses on left and right",
+      "whenToUse": "Max depth, validate BST, path sum, any tree property derivable from subtrees",
+      "slots": [
+        { "key": "BASE CASE", "label": "if node === null return identity (0/null/true/etc.)" },
+        { "key": "RECURSE", "label": "left = dfs(node.left); right = dfs(node.right)" },
+        { "key": "[COMBINE]", "label": "combine node's value with left/right results", "kind": "variable" },
+        { "key": "RETURN", "label": "return combined value to parent call" }
+      ],
+      "skeleton": "function fn(root) {\n  const dfs = (node) => {\n    if (node === null) return /* base */;\n    const left = dfs(node.left);\n    const right = dfs(node.right);\n    return /* combine node.val, left, right */;\n  };\n  return dfs(root);\n}",
+      "memberProblems": ["max_depth", "balanced_binary_tree", "validate_binary_search_tree"]
+    },
+    {
+      "id": "tree-bfs-level-order",
+      "name": "Tree — BFS (Level Order)",
+      "module": "Trees",
+      "scaffold": "iterative",
+      "shortDescription": "Process tree level by level using a queue",
+      "whenToUse": "Level traversal, right side view, level-aware computations",
+      "slots": [
+        { "key": "INITIALIZE", "label": "queue = [root]; result = []" },
+        { "key": "TRAVERSE", "label": "while (queue.length)" },
+        { "key": "snapshot level", "label": "const size = queue.length", "kind": "scaffold" },
+        { "key": "[PROCESS]", "label": "iterate size nodes; collect/process per level", "kind": "variable" },
+        { "key": "enqueue children", "label": "push node.left and node.right if present", "kind": "scaffold" },
+        { "key": "RETURN", "label": "return level-aware result" }
+      ],
+      "skeleton": "function fn(root) {\n  if (!root) return [];\n  const result = [];\n  const queue = [root];\n  while (queue.length) {\n    const level = [];\n    const size = queue.length;\n    for (let i = 0; i < size; i++) {\n      const node = queue.shift();\n      level.push(node.val);\n      if (node.left) queue.push(node.left);\n      if (node.right) queue.push(node.right);\n    }\n    result.push(level);\n  }\n  return result;\n}",
+      "memberProblems": ["binary_tree_level_order_traversal", "binary_tree_right_side_view"]
+    },
+
+    {
+      "id": "graph-grid-dfs",
+      "name": "Graph — Grid DFS",
+      "module": "Graph",
+      "scaffold": "recursive",
+      "shortDescription": "DFS on a 2D grid, marking visited cells in place or with set",
+      "whenToUse": "Number of islands, flood fill, connected components on grid",
+      "slots": [
+        { "key": "BASE CASE", "label": "out of bounds OR cell !== target → return", "kind": "scaffold" },
+        { "key": "[MARK]", "label": "mark visited (overwrite cell or add to set)", "kind": "variable" },
+        { "key": "RECURSE", "label": "dfs in 4 directions" },
+        { "key": "OUTER LOOP", "label": "for each cell, if matches: dfs and increment counter" },
+        { "key": "RETURN", "label": "return counter or aggregated result" }
+      ],
+      "skeleton": "function fn(grid) {\n  const m = grid.length, n = grid[0].length;\n  let count = 0;\n  const dfs = (r, c) => {\n    if (r < 0 || r >= m || c < 0 || c >= n || grid[r][c] !== 1) return;\n    grid[r][c] = 0;\n    dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1);\n  };\n  for (let r = 0; r < m; r++) {\n    for (let c = 0; c < n; c++) {\n      if (grid[r][c] === 1) { dfs(r, c); count++; }\n    }\n  }\n  return count;\n}",
+      "memberProblems": ["number_of_islands", "flood_fill", "max_area_of_island"]
+    },
+    {
+      "id": "graph-grid-bfs",
+      "name": "Graph — Grid BFS (Shortest Path)",
+      "module": "Graph",
+      "scaffold": "iterative",
+      "shortDescription": "BFS on a 2D grid using a queue, tracking distance",
+      "whenToUse": "Shortest path on grid, level-by-level grid expansion (rotting oranges, walls and gates)",
+      "slots": [
+        { "key": "INITIALIZE", "label": "queue with start + distance; visited set/grid" },
+        { "key": "TRAVERSE", "label": "while (queue.length)" },
+        { "key": "dequeue", "label": "pop front; check goal", "kind": "scaffold" },
+        { "key": "expand", "label": "for each of 4 neighbors", "kind": "scaffold" },
+        { "key": "[VISIT]", "label": "if passable and unvisited: mark and enqueue with dist+1", "kind": "variable" },
+        { "key": "RETURN", "label": "distance or result" }
+      ],
+      "skeleton": "function fn(grid, start) {\n  const m = grid.length, n = grid[0].length;\n  const queue = [[...start, 0]];\n  const visited = new Set([`${start[0]},${start[1]}`]);\n  while (queue.length) {\n    const [r, c, d] = queue.shift();\n    // check goal\n    for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {\n      const nr = r + dr, nc = c + dc;\n      const key = `${nr},${nc}`;\n      if (nr >= 0 && nr < m && nc >= 0 && nc < n && !visited.has(key) /* && passable */) {\n        visited.add(key);\n        queue.push([nr, nc, d + 1]);\n      }\n    }\n  }\n  return -1;\n}",
+      "memberProblems": ["rotting_oranges", "walls_and_gates", "shortest_path", "01_matrix"]
+    },
+    {
+      "id": "topological-sort",
+      "name": "Topological Sort (Kahn's BFS)",
+      "module": "Graph",
+      "scaffold": "iterative",
+      "shortDescription": "Process nodes in dependency order using indegree + queue",
+      "whenToUse": "Course schedule, build order, alien dictionary, dependency resolution",
+      "algoMasterRef": "topo_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "build adjacency list and indegree map" },
+        { "key": "seed queue", "label": "enqueue all nodes with indegree 0", "kind": "scaffold" },
+        { "key": "TRAVERSE", "label": "while queue is non-empty" },
+        { "key": "dequeue", "label": "pop node; add to result", "kind": "scaffold" },
+        { "key": "[DECREMENT]", "label": "decrement neighbors' indegree; enqueue if hits 0", "kind": "variable" },
+        { "key": "RETURN", "label": "result if length matches node count, else cycle exists" }
+      ],
+      "skeleton": "function fn(numNodes, edges) {\n  const graph = new Map();\n  const inDegree = new Array(numNodes).fill(0);\n  for (const [from, to] of edges) {\n    if (!graph.has(from)) graph.set(from, []);\n    graph.get(from).push(to);\n    inDegree[to]++;\n  }\n  const queue = [];\n  for (let i = 0; i < numNodes; i++) if (inDegree[i] === 0) queue.push(i);\n  const result = [];\n  while (queue.length) {\n    const node = queue.shift();\n    result.push(node);\n    for (const next of graph.get(node) || []) {\n      if (--inDegree[next] === 0) queue.push(next);\n    }\n  }\n  return result.length === numNodes ? result : [];\n}",
+      "memberProblems": ["course_schedule", "alien_dictionary", "sequence_reconstruction"]
+    },
+    {
+      "id": "union-find",
+      "name": "Union Find (DSU)",
+      "module": "Graph",
+      "scaffold": "iterative",
+      "shortDescription": "Disjoint set union with path compression and union by rank",
+      "whenToUse": "Connected components, redundant connection, account merge, dynamic connectivity",
+      "slots": [
+        { "key": "INITIALIZE", "label": "parent[i] = i; rank[i] = 0" },
+        { "key": "find/union", "label": "find compresses path; union links by rank", "kind": "scaffold" },
+        { "key": "TRAVERSE", "label": "iterate edges/relationships" },
+        { "key": "[UNION]", "label": "union endpoints (or check connectivity)", "kind": "variable" },
+        { "key": "RETURN", "label": "count distinct roots or query specific connectivity" }
+      ],
+      "skeleton": "function fn(n, edges) {\n  const parent = Array.from({length: n}, (_, i) => i);\n  const find = (x) => parent[x] === x ? x : (parent[x] = find(parent[x]));\n  const union = (a, b) => { const ra = find(a), rb = find(b); if (ra !== rb) parent[ra] = rb; };\n  for (const [a, b] of edges) union(a, b);\n  const roots = new Set();\n  for (let i = 0; i < n; i++) roots.add(find(i));\n  return roots.size;\n}",
+      "memberProblems": ["number_of_connected_components", "friend_circles", "redundant"]
+    },
+
+    {
+      "id": "dp-1d",
+      "name": "DP — 1D",
+      "module": "DP",
+      "scaffold": "dp",
+      "shortDescription": "dp[i] depends on a small fixed number of previous values",
+      "whenToUse": "Climbing stairs, fibonacci, house robber, decode ways",
+      "slots": [
+        { "key": "DECLARE", "label": "dp = new Array(n+1).fill(0)" },
+        { "key": "BASE CASES", "label": "set dp[0], dp[1] (or whichever indices are base)" },
+        { "key": "BUILD", "label": "for i from base+1 to n" },
+        { "key": "[RECURRENCE]", "label": "dp[i] = f(dp[i-1], dp[i-2], ...)", "kind": "variable" },
+        { "key": "RETURN", "label": "return dp[n]" }
+      ],
+      "skeleton": "function fn(n) {\n  if (n <= 1) return n;\n  const dp = new Array(n + 1).fill(0);\n  dp[0] = /* base */;\n  dp[1] = /* base */;\n  for (let i = 2; i <= n; i++) {\n    dp[i] = /* f(dp[i-1], dp[i-2]) */;\n  }\n  return dp[n];\n}",
+      "memberProblems": ["climbing_stairs", "house_robber", "fibonacci", "decode_ways"]
+    },
+    {
+      "id": "dp-2d-grid",
+      "name": "DP — 2D Grid",
+      "module": "DP",
+      "scaffold": "dp",
+      "shortDescription": "dp[i][j] depends on dp[i-1][j], dp[i][j-1] (or similar neighbors)",
+      "whenToUse": "Unique paths, min path sum, maximal square, cherry pickup",
+      "algoMasterRef": "dp_grid_intro",
+      "slots": [
+        { "key": "DECLARE", "label": "dp = m × n table initialized" },
+        { "key": "BASE CASES", "label": "initialize first row and first column" },
+        { "key": "BUILD", "label": "for i, j (nested) starting at (1, 1)" },
+        { "key": "[RECURRENCE]", "label": "dp[i][j] = f(dp[i-1][j], dp[i][j-1], grid[i][j])", "kind": "variable" },
+        { "key": "RETURN", "label": "return dp[m-1][n-1]" }
+      ],
+      "skeleton": "function fn(grid) {\n  const m = grid.length, n = grid[0].length;\n  const dp = Array.from({length: m}, () => new Array(n).fill(0));\n  dp[0][0] = grid[0][0];\n  for (let i = 1; i < m; i++) dp[i][0] = dp[i-1][0] + grid[i][0];\n  for (let j = 1; j < n; j++) dp[0][j] = dp[0][j-1] + grid[0][j];\n  for (let i = 1; i < m; i++) {\n    for (let j = 1; j < n; j++) {\n      dp[i][j] = grid[i][j] + Math.min(dp[i-1][j], dp[i][j-1]);\n    }\n  }\n  return dp[m-1][n-1];\n}",
+      "memberProblems": ["unique_paths", "min_path_sum", "maximal_square"]
+    },
+    {
+      "id": "dp-sequence-lcs",
+      "name": "DP — Sequence (LCS-style)",
+      "module": "DP",
+      "scaffold": "dp",
+      "shortDescription": "dp[i][j] over two strings/arrays; compares chars at i, j",
+      "whenToUse": "Longest common subsequence, edit distance, longest palindromic subsequence",
+      "algoMasterRef": "dp_two_sequence_intro",
+      "slots": [
+        { "key": "DECLARE", "label": "dp = (m+1) × (n+1), filled with 0" },
+        { "key": "BASE CASES", "label": "row 0 and column 0 default to 0" },
+        { "key": "BUILD", "label": "for i = 1..m, for j = 1..n" },
+        { "key": "[RECURRENCE]", "label": "if s1[i-1] === s2[j-1] dp[i][j] = dp[i-1][j-1] + 1; else max/min", "kind": "variable" },
+        { "key": "RETURN", "label": "return dp[m][n]" }
+      ],
+      "skeleton": "function fn(s1, s2) {\n  const m = s1.length, n = s2.length;\n  const dp = Array.from({length: m + 1}, () => new Array(n + 1).fill(0));\n  for (let i = 1; i <= m; i++) {\n    for (let j = 1; j <= n; j++) {\n      if (s1[i - 1] === s2[j - 1]) dp[i][j] = dp[i - 1][j - 1] + 1;\n      else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);\n    }\n  }\n  return dp[m][n];\n}",
+      "memberProblems": ["longest_common_subsequence", "edit_distance"]
+    },
+    {
+      "id": "dp-knapsack",
+      "name": "DP — 0/1 Knapsack",
+      "module": "DP",
+      "scaffold": "dp",
+      "shortDescription": "Choose subset of items to maximize value within capacity",
+      "whenToUse": "Partition equal subset sum, coin change variants, target sum",
+      "algoMasterRef": "knapsack_intro",
+      "slots": [
+        { "key": "DECLARE", "label": "dp = new Array(capacity + 1).fill(0)" },
+        { "key": "BASE CASES", "label": "dp[0] = 0 (zero capacity, zero value)" },
+        { "key": "BUILD", "label": "outer: for each item; inner: for c from capacity down to item.weight" },
+        { "key": "[RECURRENCE]", "label": "dp[c] = Math.max(dp[c], dp[c - weight] + value)", "kind": "variable" },
+        { "key": "RETURN", "label": "return dp[capacity]" }
+      ],
+      "skeleton": "function fn(weights, values, capacity) {\n  const dp = new Array(capacity + 1).fill(0);\n  for (let i = 0; i < weights.length; i++) {\n    for (let c = capacity; c >= weights[i]; c--) {\n      dp[c] = Math.max(dp[c], dp[c - weights[i]] + values[i]);\n    }\n  }\n  return dp[capacity];\n}",
+      "memberProblems": ["partition_equal", "knapsack_weight_only", "target_sum"]
+    },
+    {
+      "id": "dp-interval",
+      "name": "DP — Interval",
+      "module": "DP",
+      "scaffold": "dp",
+      "shortDescription": "dp[i][j] over interval (i,j); inner loop over split point k",
+      "whenToUse": "Burst balloons, matrix chain multiplication, palindrome partitioning",
+      "algoMasterRef": "dp_interval_intro",
+      "slots": [
+        { "key": "DECLARE", "label": "dp = n × n table; pad input with sentinels if helpful" },
+        { "key": "BASE CASES", "label": "length-1 intervals = 0 (or trivial value)" },
+        { "key": "BUILD", "label": "outer: for length 1..n; inner: for i (j = i + length - 1); innermost: for k = i..j" },
+        { "key": "[RECURRENCE]", "label": "dp[i][j] = max/min over splits at k", "kind": "variable" },
+        { "key": "RETURN", "label": "return dp[0][n-1]" }
+      ],
+      "skeleton": "function fn(arr) {\n  const n = arr.length;\n  const dp = Array.from({length: n}, () => new Array(n).fill(0));\n  for (let len = 1; len <= n; len++) {\n    for (let i = 0; i + len - 1 < n; i++) {\n      const j = i + len - 1;\n      for (let k = i; k <= j; k++) {\n        dp[i][j] = Math.max(dp[i][j], /* split logic */);\n      }\n    }\n  }\n  return dp[0][n - 1];\n}",
+      "memberProblems": ["burst_balloons", "festival_game"]
+    },
+    {
+      "id": "dp-state-machine",
+      "name": "DP — State Machine (Decision)",
+      "module": "DP",
+      "scaffold": "dp",
+      "shortDescription": "Track multiple dp states (e.g., holding/not-holding stock); transition between states each step",
+      "whenToUse": "Stock buy/sell variants with cooldown, transaction limits, paint house",
+      "slots": [
+        { "key": "DECLARE", "label": "one variable per state (e.g., hold, cash) or dp[i][state]" },
+        { "key": "BASE CASES", "label": "init each state's value at step 0 (e.g., hold = -prices[0], cash = 0)" },
+        { "key": "BUILD", "label": "for each step from 1 onward" },
+        { "key": "[RECURRENCE]", "label": "compute next state values from current; update", "kind": "variable" },
+        { "key": "RETURN", "label": "return the desired final state" }
+      ],
+      "skeleton": "function fn(prices) {\n  let hold = -prices[0];\n  let cash = 0;\n  for (let i = 1; i < prices.length; i++) {\n    const newHold = Math.max(hold, cash - prices[i]);\n    const newCash = Math.max(cash, hold + prices[i]);\n    hold = newHold;\n    cash = newCash;\n  }\n  return cash;\n}",
+      "memberProblems": ["best_time_to_buy_and_sell_stock", "paint_house"]
+    },
+
+    {
+      "id": "backtracking-generate",
+      "name": "Backtracking — Generate All",
+      "module": "Backtracking",
+      "scaffold": "recursive",
+      "shortDescription": "Recursively build candidates; choose, recurse, undo (push/pop)",
+      "whenToUse": "Permutations, combinations, subsets, generate parentheses",
+      "slots": [
+        { "key": "BASE CASE", "label": "if path satisfies completion criteria, push to result and return" },
+        { "key": "EXPLORE", "label": "for each choice in remaining options" },
+        { "key": "CHOOSE", "label": "path.push(choice)", "kind": "scaffold" },
+        { "key": "RECURSE", "label": "backtrack with updated state" },
+        { "key": "UNCHOOSE", "label": "path.pop()", "kind": "scaffold" },
+        { "key": "[FILTER]", "label": "skip choices that violate constraints (problem-specific)", "kind": "variable" }
+      ],
+      "skeleton": "function fn(input) {\n  const result = [];\n  const path = [];\n  const backtrack = (start) => {\n    if (/* base case */) {\n      result.push([...path]);\n      return;\n    }\n    for (let i = start; i < input.length; i++) {\n      path.push(input[i]);\n      backtrack(i + 1);\n      path.pop();\n    }\n  };\n  backtrack(0);\n  return result;\n}",
+      "memberProblems": ["permutations", "combinations", "subsets", "combination_sum"]
+    },
+
+    {
+      "id": "heap-top-k",
+      "name": "Heap — Top K",
+      "module": "Heap",
+      "scaffold": "iterative",
+      "shortDescription": "Maintain a heap of size k while scanning items",
+      "whenToUse": "K largest, K closest, top K frequent",
+      "algoMasterRef": "heap_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "min-heap (or max-heap depending on direction)" },
+        { "key": "TRAVERSE", "label": "for-of items" },
+        { "key": "push", "label": "heap.push(item)", "kind": "scaffold" },
+        { "key": "[EVICT]", "label": "if heap size > k, pop smallest", "kind": "variable" },
+        { "key": "RETURN", "label": "heap contents = the top k" }
+      ],
+      "skeleton": "function fn(items, k) {\n  const heap = new MinHeap();\n  for (const item of items) {\n    heap.push(item);\n    if (heap.size() > k) heap.pop();\n  }\n  return heap.toArray();\n}",
+      "memberProblems": ["kth_largest", "k_closest", "top_k"]
+    },
+
+    {
+      "id": "intervals-sort-merge",
+      "name": "Intervals — Sort + Merge",
+      "module": "Intervals",
+      "scaffold": "iterative",
+      "shortDescription": "Sort intervals by start; iterate and merge overlapping",
+      "whenToUse": "Merge intervals, insert interval, meeting rooms",
+      "algoMasterRef": "interval_pattern_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "sort intervals by start time; result = [intervals[0]]" },
+        { "key": "TRAVERSE", "label": "for each remaining interval" },
+        { "key": "[MERGE]", "label": "if overlaps with last in result, extend end; else push as new", "kind": "variable" },
+        { "key": "RETURN", "label": "return result" }
+      ],
+      "skeleton": "function fn(intervals) {\n  if (intervals.length === 0) return [];\n  intervals.sort((a, b) => a[0] - b[0]);\n  const result = [intervals[0]];\n  for (let i = 1; i < intervals.length; i++) {\n    const last = result[result.length - 1];\n    if (intervals[i][0] <= last[1]) {\n      last[1] = Math.max(last[1], intervals[i][1]);\n    } else {\n      result.push(intervals[i]);\n    }\n  }\n  return result;\n}",
+      "memberProblems": ["merge_intervals", "insert_interval"]
+    },
+
+    {
+      "id": "greedy-sort-scan",
+      "name": "Greedy — Sort + Linear Scan",
+      "module": "Greedy",
+      "scaffold": "iterative",
+      "shortDescription": "Sort first; iterate making the locally optimal choice each step",
+      "whenToUse": "Interval scheduling, merge cost minimization, partition labels",
+      "slots": [
+        { "key": "INITIALIZE", "label": "sort by relevant criterion; init accumulator" },
+        { "key": "TRAVERSE", "label": "for each item in sorted order" },
+        { "key": "[CHOOSE]", "label": "greedy decision; update accumulator", "kind": "variable" },
+        { "key": "RETURN", "label": "return accumulator" }
+      ],
+      "skeleton": "function fn(items) {\n  items.sort((a, b) => /* comparator */);\n  let result = 0;\n  for (const item of items) {\n    // greedy decision; update result\n  }\n  return result;\n}",
+      "memberProblems": ["partition_labels", "fill_the_truck", "fetch_items_to_display"]
+    },
+    {
+      "id": "greedy-running-track",
+      "name": "Greedy — Running Max/Min Tracking",
+      "module": "Greedy",
+      "scaffold": "iterative",
+      "shortDescription": "Single pass; maintain running min/max and update answer greedily",
+      "whenToUse": "Best time to buy stock, jump game, gas station",
+      "slots": [
+        { "key": "INITIALIZE", "label": "running tracker(s) and best result" },
+        { "key": "TRAVERSE", "label": "for each item" },
+        { "key": "[UPDATE]", "label": "update running tracker; update best", "kind": "variable" },
+        { "key": "RETURN", "label": "return best" }
+      ],
+      "skeleton": "function fn(arr) {\n  let runningMin = arr[0];\n  let best = 0;\n  for (let i = 1; i < arr.length; i++) {\n    best = Math.max(best, arr[i] - runningMin);\n    runningMin = Math.min(runningMin, arr[i]);\n  }\n  return best;\n}",
+      "memberProblems": ["jump_game", "gas_station", "best_time_to_buy_and_sell_stock"]
+    },
+    {
+      "id": "greedy-with-heap",
+      "name": "Greedy + Heap",
+      "module": "Greedy",
+      "scaffold": "iterative",
+      "shortDescription": "Use heap to always pick the optimal element greedily",
+      "whenToUse": "Task scheduler, reorganize string, connect ropes, minimum cost merge",
+      "slots": [
+        { "key": "INITIALIZE", "label": "insert all elements into heap (max or min)" },
+        { "key": "TRAVERSE", "label": "while heap not empty (or size > 1)" },
+        { "key": "pop optimal", "label": "pop optimal element(s) from heap", "kind": "scaffold" },
+        { "key": "[COMPUTE]", "label": "compute step contribution to result", "kind": "variable" },
+        { "key": "reinsert", "label": "push back any modified element if applicable", "kind": "scaffold" },
+        { "key": "RETURN", "label": "return result" }
+      ],
+      "skeleton": "function fn(items) {\n  const heap = new MinHeap();\n  for (const item of items) heap.push(item);\n  let total = 0;\n  while (heap.size() > 1) {\n    const a = heap.pop();\n    const b = heap.pop();\n    const merged = a + b;\n    total += merged;\n    heap.push(merged);\n  }\n  return total;\n}",
+      "memberProblems": ["connect_ropes", "task_scheduler", "reorganize_string"]
+    },
+
+    {
+      "id": "sort-implementations",
+      "name": "Sort — Implementations (Pedagogical)",
+      "module": "Sorting",
+      "scaffold": "iterative",
+      "shortDescription": "Implement a sorting algorithm from scratch (bubble, insertion, selection, merge, quick)",
+      "whenToUse": "Drilling the mechanics of sorting algorithms; understanding time/space tradeoffs",
+      "algoMasterRef": "sorting_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "n = arr.length; any pass-tracking flags" },
+        { "key": "TRAVERSE", "label": "outer pass over array (n-1 passes typical)" },
+        { "key": "inner pass", "label": "inner loop to compare/swap or select", "kind": "scaffold" },
+        { "key": "[COMPARE-SWAP]", "label": "conditional swap or merge step", "kind": "variable" },
+        { "key": "RETURN", "label": "return sorted array (in place or new)" }
+      ],
+      "skeleton": "function bubbleSort(arr) {\n  const n = arr.length;\n  for (let i = 0; i < n - 1; i++) {\n    let swapped = false;\n    for (let j = 0; j < n - 1 - i; j++) {\n      if (arr[j] > arr[j + 1]) {\n        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];\n        swapped = true;\n      }\n    }\n    if (!swapped) break;\n  }\n  return arr;\n}",
+      "memberProblems": ["bubble_sort", "insertion_sort", "selection_sort", "merge_sort", "quick_sort", "count_swaps_bubble_sort"]
+    },
+    {
+      "id": "sort-custom-comparator",
+      "name": "Sort — Custom Comparator",
+      "module": "Sorting",
+      "scaffold": "iterative",
+      "shortDescription": "Use built-in sort with a custom comparison function",
+      "whenToUse": "Sort by frequency, multi-key sort, lexicographic with twist (largest number)",
+      "slots": [
+        { "key": "INITIALIZE", "label": "optional: build frequency map / derive sort key per element" },
+        { "key": "[COMPARATOR]", "label": "arr.sort with custom (a, b) comparator", "kind": "variable" },
+        { "key": "post-process", "label": "optional: derive final result from sorted order", "kind": "scaffold" },
+        { "key": "RETURN", "label": "return result" }
+      ],
+      "skeleton": "function fn(arr) {\n  arr.sort((a, b) => {\n    // return negative if a should come before b\n    // return positive if a should come after b\n    return /* comparator */;\n  });\n  return arr;\n}",
+      "memberProblems": ["largest_number_from_array", "sort_by_frequency", "custom_comparator_sort", "relative_sort_array", "reorder_data_in_log_files"]
+    },
+    {
+      "id": "sort-then-scan",
+      "name": "Sort + Linear Scan",
+      "module": "Sorting",
+      "scaffold": "iterative",
+      "shortDescription": "Sort first, then iterate to find pairs/sequences/answer",
+      "whenToUse": "Problems easier after sorting: arithmetic progression, min difference pairs, max product of K",
+      "slots": [
+        { "key": "INITIALIZE", "label": "sort the input; init accumulator/best result" },
+        { "key": "TRAVERSE", "label": "for i in 0..n" },
+        { "key": "[DERIVE]", "label": "use arr[i] and neighbors (sorted property)", "kind": "variable" },
+        { "key": "RETURN", "label": "return result" }
+      ],
+      "skeleton": "function fn(arr) {\n  arr.sort((a, b) => a - b);\n  let result = /* initial */;\n  for (let i = 0; i < arr.length; i++) {\n    // use arr[i] and neighbors (sorted property)\n  }\n  return result;\n}",
+      "memberProblems": ["can_make_arithmetic_progression", "minimum_difference_pairs", "max_product_of_three", "h_index"]
+    },
+
+    {
+      "id": "graph-traversal-adjlist",
+      "name": "Graph — BFS/DFS on Adjacency List",
+      "module": "Graph",
+      "scaffold": "iterative",
+      "shortDescription": "BFS or DFS over a graph represented as an adjacency list (or implicit state graph)",
+      "whenToUse": "Generic graph traversal where neighbors come from a Map/array (not a grid)",
+      "algoMasterRef": "bfs_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "build adjacency list; visited set; queue/stack with start" },
+        { "key": "TRAVERSE", "label": "while queue not empty" },
+        { "key": "dequeue", "label": "pop node (BFS shift, DFS pop)", "kind": "scaffold" },
+        { "key": "expand", "label": "for each neighbor in graph.get(node)", "kind": "scaffold" },
+        { "key": "[VISIT]", "label": "if unvisited, mark and enqueue with new state", "kind": "variable" },
+        { "key": "RETURN", "label": "result (path, count, distance, etc.)" }
+      ],
+      "skeleton": "function fn(graph, start) {\n  const visited = new Set([start]);\n  const queue = [[start, 0]];\n  while (queue.length) {\n    const [node, dist] = queue.shift();\n    // process node\n    for (const next of graph.get(node) || []) {\n      if (!visited.has(next)) {\n        visited.add(next);\n        queue.push([next, dist + 1]);\n      }\n    }\n  }\n  return /* result */;\n}",
+      "memberProblems": ["graph_bfs", "graph_dfs", "longest_cycle", "open_the_lock", "shortest_path_unweight", "sliding_puzzle", "word_ladder"]
+    },
+    {
+      "id": "dijkstra",
+      "name": "Dijkstra — Weighted Shortest Path",
+      "module": "Graph",
+      "scaffold": "iterative",
+      "shortDescription": "Min-heap based shortest path on weighted graphs (non-negative weights)",
+      "whenToUse": "Shortest path with edge weights; cheapest flights with K stops; network delay time",
+      "algoMasterRef": "dijkstra_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "dist[i] = Infinity (start = 0); min-heap with [0, start]" },
+        { "key": "TRAVERSE", "label": "while heap not empty" },
+        { "key": "extract min", "label": "pop smallest [d, node]; skip if d > dist[node]", "kind": "scaffold" },
+        { "key": "[RELAX]", "label": "for each neighbor: if d + weight < dist[next], update and push", "kind": "variable" },
+        { "key": "RETURN", "label": "return dist[target] (or full dist array)" }
+      ],
+      "skeleton": "function dijkstra(graph, start, target) {\n  const dist = new Map();\n  dist.set(start, 0);\n  const heap = new MinHeap();\n  heap.push([0, start]);\n  while (heap.size() > 0) {\n    const [d, node] = heap.pop();\n    if (node === target) return d;\n    if (d > (dist.get(node) ?? Infinity)) continue;\n    for (const [next, w] of graph.get(node) || []) {\n      const nd = d + w;\n      if (nd < (dist.get(next) ?? Infinity)) {\n        dist.set(next, nd);\n        heap.push([nd, next]);\n      }\n    }\n  }\n  return -1;\n}",
+      "memberProblems": ["dijkstra_intro", "maximum_minimum_value_path_ii", "train_ride_3"]
+    },
+    {
+      "id": "tarjan-bridges-articulation",
+      "name": "Tarjan — Bridges / Articulation Points",
+      "module": "Graph",
+      "scaffold": "recursive",
+      "shortDescription": "DFS with discovery/low-link tracking to find critical edges/vertices",
+      "whenToUse": "Critical connections, articulation points, bridges in a graph",
+      "slots": [
+        { "key": "BASE CASE", "label": "if disc[v] !== -1 (already visited), update low and skip" },
+        { "key": "RECURSE", "label": "for unvisited neighbor v: dfs(v, u); set disc, low" },
+        { "key": "update low", "label": "low[u] = min(low[u], low[v])", "kind": "scaffold" },
+        { "key": "[CRITICAL]", "label": "if low[v] > disc[u], record edge (u,v) as bridge / mark articulation", "kind": "variable" },
+        { "key": "RETURN", "label": "return collected bridges/articulation points" }
+      ],
+      "skeleton": "function findBridges(n, edges) {\n  const graph = new Map();\n  for (const [u, v] of edges) {\n    if (!graph.has(u)) graph.set(u, []);\n    if (!graph.has(v)) graph.set(v, []);\n    graph.get(u).push(v);\n    graph.get(v).push(u);\n  }\n  const disc = new Array(n).fill(-1);\n  const low = new Array(n).fill(-1);\n  const bridges = [];\n  let time = 0;\n  const dfs = (u, parent) => {\n    disc[u] = low[u] = time++;\n    for (const v of graph.get(u) || []) {\n      if (disc[v] === -1) {\n        dfs(v, u);\n        low[u] = Math.min(low[u], low[v]);\n        if (low[v] > disc[u]) bridges.push([u, v]);\n      } else if (v !== parent) {\n        low[u] = Math.min(low[u], disc[v]);\n      }\n    }\n  };\n  for (let i = 0; i < n; i++) if (disc[i] === -1) dfs(i, -1);\n  return bridges;\n}",
+      "memberProblems": ["data_center_critical_connection", "find_critical_nodes"]
+    },
+    {
+      "id": "bitmask-dp",
+      "name": "DP — Bitmask (Subset State)",
+      "module": "DP",
+      "scaffold": "dp",
+      "shortDescription": "DP where state is a bitmask representing which items have been used/visited",
+      "whenToUse": "Traveling salesman variants, assignment problems with small N (≤20), subset enumeration with optimization",
+      "algoMasterRef": "bitmask_intro",
+      "slots": [
+        { "key": "DECLARE", "label": "dp = new Array(1 << n).fill(Infinity)" },
+        { "key": "BASE CASES", "label": "dp[0] = 0 (empty set)" },
+        { "key": "BUILD", "label": "for mask from 0 to (1 << n) - 1; for each unset bit i" },
+        { "key": "[RECURRENCE]", "label": "dp[mask | (1 << i)] = min(dp[next], dp[mask] + cost(i, mask))", "kind": "variable" },
+        { "key": "RETURN", "label": "return dp[(1<<n) - 1]" }
+      ],
+      "skeleton": "function fn(n, /* costs */) {\n  const FULL = (1 << n) - 1;\n  const dp = new Array(1 << n).fill(Infinity);\n  dp[0] = 0;\n  for (let mask = 0; mask < (1 << n); mask++) {\n    if (dp[mask] === Infinity) continue;\n    for (let i = 0; i < n; i++) {\n      if (mask & (1 << i)) continue;\n      const next = mask | (1 << i);\n      dp[next] = Math.min(dp[next], dp[mask] + /* cost */);\n    }\n  }\n  return dp[FULL];\n}",
+      "memberProblems": ["min_cost_to_visit_every_node", "campus_bikes_ii"]
+    },
+    {
+      "id": "trie-search",
+      "name": "Trie — Prefix Tree Search",
+      "module": "Trees",
+      "scaffold": "recursive",
+      "shortDescription": "Build a trie of words; query with prefix or backtracking traversal",
+      "whenToUse": "Word search II, autocomplete, longest common prefix, dictionary lookup",
+      "algoMasterRef": "trie_intro",
+      "slots": [
+        { "key": "BUILD TRIE", "label": "insert all words char-by-char into nested children map" },
+        { "key": "BASE CASE", "label": "if cell out of bounds OR no child for ch, return" },
+        { "key": "[MATCH]", "label": "if trie node marks end-of-word, record match (and clear to dedupe)", "kind": "variable" },
+        { "key": "RECURSE", "label": "DFS in 4 directions (or descend the trie further)" },
+        { "key": "prune", "label": "if trie subtree empty, can drop; backtrack mark on cell", "kind": "scaffold" },
+        { "key": "RETURN", "label": "return matched results" }
+      ],
+      "skeleton": "function fn(board, words) {\n  const root = {};\n  for (const word of words) {\n    let node = root;\n    for (const ch of word) {\n      if (!node[ch]) node[ch] = {};\n      node = node[ch];\n    }\n    node.word = word;\n  }\n  const result = [];\n  const dfs = (r, c, node) => {\n    const ch = board[r]?.[c];\n    if (!ch || !node[ch]) return;\n    const next = node[ch];\n    if (next.word) { result.push(next.word); next.word = null; }\n    board[r][c] = '#';\n    for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) dfs(r+dr, c+dc, next);\n    board[r][c] = ch;\n  };\n  for (let r = 0; r < board.length; r++)\n    for (let c = 0; c < board[0].length; c++) dfs(r, c, root);\n  return result;\n}",
+      "memberProblems": ["word_search_ii"]
+    },
+    {
+      "id": "sweep-line",
+      "name": "Sweep Line",
+      "module": "Intervals",
+      "scaffold": "iterative",
+      "shortDescription": "Sort events by position; sweep across maintaining an active set",
+      "whenToUse": "Skyline problem, meeting rooms II, calendar booking, interval coverage",
+      "algoMasterRef": "line_sweep_intro",
+      "slots": [
+        { "key": "INITIALIZE", "label": "convert intervals into start/end events; sort events" },
+        { "key": "TRAVERSE", "label": "iterate events in order" },
+        { "key": "[UPDATE]", "label": "update active set / running count based on event type", "kind": "variable" },
+        { "key": "track", "label": "record peak/transition if state changed", "kind": "scaffold" },
+        { "key": "RETURN", "label": "return result (peak count, transition list, etc.)" }
+      ],
+      "skeleton": "function fn(intervals) {\n  const events = [];\n  for (const [start, end] of intervals) {\n    events.push([start, 1]);   // enter\n    events.push([end, -1]);    // exit\n  }\n  events.sort((a, b) => a[0] - b[0] || a[1] - b[1]);\n  let active = 0, peak = 0;\n  for (const [, delta] of events) {\n    active += delta;\n    peak = Math.max(peak, active);\n  }\n  return peak;\n}",
+      "memberProblems": ["skyline_problem"]
+    },
+
+    {
+      "id": "divide-and-conquer",
+      "name": "Divide and Conquer",
+      "module": "Divide and Conquer",
+      "scaffold": "recursive",
+      "shortDescription": "Split into smaller subproblems, solve recursively, combine results",
+      "whenToUse": "Merge sort, quick sort, find majority element, max subarray (D&C version)",
+      "algoMasterRef": "divide_and_conquer_intro",
+      "slots": [
+        { "key": "BASE CASE", "label": "single element / trivial input → return directly" },
+        { "key": "DIVIDE", "label": "split input into halves" },
+        { "key": "RECURSE", "label": "recursively solve each half" },
+        { "key": "[COMBINE]", "label": "merge subresults into final answer", "kind": "variable" }
+      ],
+      "skeleton": "function fn(arr, lo = 0, hi = arr.length - 1) {\n  if (lo >= hi) return /* base */;\n  const mid = Math.floor((lo + hi) / 2);\n  const left = fn(arr, lo, mid);\n  const right = fn(arr, mid + 1, hi);\n  return /* combine left, right */;\n}",
+      "memberProblems": ["merge_sort", "quick_sort"]
+    },
+
+    {
+      "id": "linear-scan",
+      "name": "Linear Scan",
+      "module": "Arrays",
+      "scaffold": "iterative",
+      "shortDescription": "Single pass through input making a per-element decision; no auxiliary data structure",
+      "whenToUse": "Find max/min, count satisfying condition, in-place transform, simple aggregations that don't need a Map/Set/Stack",
+      "slots": [
+        { "key": "INITIALIZE", "label": "accumulator / running tracker / result variable" },
+        { "key": "TRAVERSE", "label": "for each element (or index) in input" },
+        { "key": "[PROCESS]", "label": "per-element decision: update accumulator", "kind": "variable" },
+        { "key": "RETURN", "label": "return accumulator" }
+      ],
+      "skeleton": "function fn(arr) {\n  let result = /* initial */;\n  for (let i = 0; i < arr.length; i++) {\n    // per-element work; update result\n  }\n  return result;\n}",
+      "memberProblems": []
+    },
+    {
+      "id": "data-structure-design",
+      "name": "Data Structure Design",
+      "module": "Design",
+      "scaffold": "design",
+      "shortDescription": "Build a class supporting a defined set of operations efficiently",
+      "whenToUse": "LRU cache, median finder, trie, segment tree, design hit counter, twitter — any class-style problem with operation sequence",
+      "slots": null,
+      "skeleton": "class MyDataStructure {\n  constructor(/* params */) {\n    // internal state\n  }\n  operation1(/* args */) {\n    // ...\n  }\n  operation2(/* args */) {\n    // ...\n  }\n}",
+      "memberProblems": []
+    },
+    {
+      "id": "event-simulation",
+      "name": "Event Simulation",
+      "module": "Simulation",
+      "scaffold": "iterative",
+      "shortDescription": "Step through events/time/state transitions in order, updating world state per step",
+      "whenToUse": "Game-of-life-style ticks, robot movement on a grid, parsing scripted commands, processing timeline of timestamped events",
+      "slots": [
+        { "key": "INITIALIZE", "label": "world state (position, direction, scores, queues)" },
+        { "key": "TRAVERSE", "label": "for each event/tick/step" },
+        { "key": "[STEP]", "label": "apply event's effect to world state", "kind": "variable" },
+        { "key": "track", "label": "record max/snapshot/state if needed", "kind": "scaffold" },
+        { "key": "RETURN", "label": "return final state or aggregated result" }
+      ],
+      "skeleton": "function fn(events) {\n  let state = /* initial */;\n  for (const event of events) {\n    // apply event to state\n  }\n  return state;\n}",
+      "memberProblems": []
+    }
+  ]
+}

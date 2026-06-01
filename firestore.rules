@@ -1,0 +1,12 @@
+rules_version = '2';
+
+// Each user can read/write only their own document at users/{uid}.
+// This is the only thing protecting your data on the public Vercel URL —
+// the Firebase web config is public, so auth + these rules are the guard.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}
