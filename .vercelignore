@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+scripts
+test-results
+tests
+*.excalidraw
+serviceAccount.json
+firestore-backup.json
+flowpath-backup.json
+IMPLEMENTATION_PLAN.md
+VIZ_SKILL_PLAN.md
