@@ -315,7 +315,7 @@ export function MyCode(props: Props) {
       <div className="flex items-center gap-3 text-xs text-[#6c7086]">
         <span>Saved locally · Cmd+Z works</span>
         <div className="ml-auto flex items-center gap-2">
-          <CopyButton text={() => buildCopyTemplate(getCode(), props.solutionJS ?? '')} label="Copy" />
+          <CopyButton text={() => buildCopyTemplate(props.problemId, getCode(), props.solutionJS ?? '')} label="Copy" />
           <button
             onClick={reset}
             className="text-[#6c7086] hover:text-[#a6adc8] transition-colors"

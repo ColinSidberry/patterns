@@ -144,7 +144,7 @@ export function SolutionDebugger({ code, problemId, paramNames, slotLabels }: Pr
               Test {i + 1}
             </button>
           ))}
-          <CopyButton text={() => buildCopyTemplate(readMyCode(problemId), code)} label="Copy" />
+          <CopyButton text={() => buildCopyTemplate(problemId, readMyCode(problemId), code)} label="Copy" />
         </div>
         <div className="ml-auto flex items-center gap-2">
           {status.kind === 'loading' && (
