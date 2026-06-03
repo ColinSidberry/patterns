@@ -1,11 +1,24 @@
 'use client'
 
-// Header stopwatch for the per-problem study page. Auto-starts when the
-// component mounts (i.e., when the study page is rendered for a problem).
-// Click to pause/resume; small ↻ to reset. Resets naturally when navigating
-// to a different problem since the route remounts the component.
+// Header stopwatch for the per-problem study page, backed by the timing engine
+// (lib/timing.ts). Auto-starts when the page mounts for a problem, tagged
+// new/review from SRS state. Shows ACTIVE time only — it auto-pauses while the
+// tab is hidden or after ~90s idle, so the recorded number reflects real focus.
+// The session is recorded when you rate the problem (SrsControls), or on
+// navigation away (unmount). The pause button is a manual override; ↻ restarts
+// the session from zero without recording.
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { loadState } from '@/lib/srs'
+import {
+  startTimer,
+  stopTimer,
+  pauseTimer,
+  resumeTimer,
+  restartTimer,
+  isRunning,
+  elapsedMs,
+} from '@/lib/timing'
 
 interface Props {
   problemId: string
@@ -17,54 +30,41 @@ function formatMMSS(totalSeconds: number): string {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-export function PageStopwatch({ problemId: _problemId }: Props) {
-  const [elapsed, setElapsed] = useState(0)
+export function PageStopwatch({ problemId }: Props) {
+  // A tick counter just to force re-render; the real state lives in timing.ts.
+  const [, setTick] = useState(0)
   const [running, setRunning] = useState(true)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const lastTickRef = useRef<number>(0)
 
-  // Auto-start on mount; clean up on unmount.
   useEffect(() => {
-    lastTickRef.current = performance.now()
-    intervalRef.current = setInterval(() => {
-      const now = performance.now()
-      const dt = (now - lastTickRef.current) / 1000
-      lastTickRef.current = now
-      setElapsed((e) => e + dt)
-    }, 250)
+    startTimer(problemId, loadState(problemId) ? 'review' : 'new')
+    setRunning(true)
+    const id = setInterval(() => {
+      setRunning(isRunning())
+      setTick((n) => n + 1)
+    }, 500)
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-      }
+      clearInterval(id)
+      stopTimer('nav')
     }
-  }, [])
+  }, [problemId])
 
-  // React to pause/resume toggles.
-  useEffect(() => {
-    if (running) {
-      if (intervalRef.current) return
-      lastTickRef.current = performance.now()
-      intervalRef.current = setInterval(() => {
-        const now = performance.now()
-        const dt = (now - lastTickRef.current) / 1000
-        lastTickRef.current = now
-        setElapsed((e) => e + dt)
-      }, 250)
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-      }
-    }
-  }, [running])
+  const elapsedSec = Math.floor(elapsedMs() / 1000)
 
-  const elapsedSec = Math.floor(elapsed)
+  const toggle = () => {
+    if (isRunning()) pauseTimer()
+    else resumeTimer()
+    setRunning(isRunning())
+  }
+  const reset = () => {
+    restartTimer()
+    setRunning(isRunning())
+    setTick((n) => n + 1)
+  }
 
   return (
     <div className="flex items-center gap-1 shrink-0">
       <button
-        onClick={() => setRunning((r) => !r)}
+        onClick={toggle}
         title={running ? 'Pause stopwatch' : 'Resume stopwatch'}
         className={`text-xs font-mono tabular-nums px-2.5 py-1 rounded-md border transition-colors flex items-center gap-1.5 ${
           running
@@ -76,8 +76,8 @@ export function PageStopwatch({ problemId: _problemId }: Props) {
         <span>{formatMMSS(elapsedSec)}</span>
       </button>
       <button
-        onClick={() => setElapsed(0)}
-        title="Reset stopwatch"
+        onClick={reset}
+        title="Restart timer from zero (does not record)"
         className="text-xs text-[#6c7086] hover:text-[#cdd6f4] px-1.5 py-1 transition-colors"
       >
         ↻

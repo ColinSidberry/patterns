@@ -15,6 +15,7 @@ import {
   type SrsState,
 } from '@/lib/srs'
 import { getEffectiveGoal, loadGoal } from '@/lib/goal'
+import { stopTimer } from '@/lib/timing'
 
 const RATINGS: { q: Quality; label: string; tone: string; hint: string }[] = [
   { q: 0, label: 'Again',  tone: 'bg-red-900/30 border-red-500/40 hover:bg-red-900/50 text-red-300',           hint: 'forgot — retry tomorrow' },
@@ -53,6 +54,10 @@ export function SrsControls({ problemId }: { problemId: string }) {
   }
 
   const rate = (q: Quality) => {
+    // Rating completes the study session — record the active study time
+    // (tagged new/review from when the problem was opened). No-op if already
+    // recorded or below the minimum-duration threshold.
+    stopTimer('rating')
     // Pass the user's study-day mask so nextDue snaps forward to the next
     // study day instead of landing on a weekend.
     const goal = getEffectiveGoal(loadGoal())

@@ -6,6 +6,7 @@ import {
   type DailyPlan,
   type StudyGoal,
 } from '@/lib/goal'
+import { medianMinutes } from '@/lib/timing'
 
 interface Props {
   goal: StudyGoal | null
@@ -49,6 +50,13 @@ export function GoalCard({ goal, plan, onEdit, onSlideDeadline }: Props) {
     : plan.overload
       ? 'text-amber-300'
       : 'text-cyan-300'
+
+  // Time-aware estimate: medians from your logged study time once enough
+  // sessions exist (≥5 each), else fall back to rough constants.
+  const newMin = medianMinutes('new')
+  const reviewMin = medianMinutes('review')
+  const calibrated = newMin !== null || reviewMin !== null
+  const estMin = Math.round(plan.newToday * (newMin ?? 20) + plan.reviewsDueToday * (reviewMin ?? 6))
 
   return (
     <section className="rounded-2xl border border-[#313244] bg-[#1e1e2e] p-6">
@@ -94,6 +102,17 @@ export function GoalCard({ goal, plan, onEdit, onSlideDeadline }: Props) {
           tone="amber"
         />
       </div>
+
+      <p className="text-xs text-[#a6adc8] mt-3">
+        Est. time today:{' '}
+        <span className="font-mono text-[#cdd6f4]">≈ {estMin} min</span>
+        <span className="text-[#6c7086]">
+          {' · '}
+          {calibrated
+            ? `your pace — new ~${Math.round(newMin ?? 20)}m, review ~${Math.round(reviewMin ?? 6)}m`
+            : 'rough estimate — refines as you log study time'}
+        </span>
+      </p>
 
       {plan.overload && (
         <div className="mt-4 rounded-lg border border-amber-500/40 bg-amber-900/15 px-4 py-3 flex items-start gap-3">
