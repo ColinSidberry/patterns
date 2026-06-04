@@ -1,10 +1,10 @@
 // Study-time tracking. A session starts when a problem opens and accumulates
-// ACTIVE time only — paused while the tab is hidden or after >90s idle — so
-// averages reflect real focus, not wall-clock (open-and-walk-away would
-// otherwise log hours). A session records on rating (primary), on navigation
-// away, or via a manual stop. Each record is stored under its OWN key so the
-// cloud sync (last-write-wins per key) never clobbers a shared array; records
-// also sync across devices, so medians pool all study.
+// time while the tab is VISIBLE — reading and thinking with no keypresses
+// still counts as studying. It pauses only when the tab is hidden (you switched
+// away / locked your phone) or you pause it manually. A session records on
+// rating (primary), on navigation away, or via manual stop. Each record is
+// stored under its OWN key so the cloud sync (last-write-wins per key) never
+// clobbers it; records sync across devices so medians pool all study.
 
 export type TimingType = 'new' | 'review'
 
@@ -17,21 +17,17 @@ export interface TimingRecord {
 }
 
 const PREFIX = 'patterns:timing:'
-const IDLE_MS = 90_000
 const MIN_RECORD_MS = 3_000
-const ACTIVITY_EVENTS = ['keydown', 'pointerdown', 'scroll', 'input'] as const
 
 interface Session {
   problemId: string
   type: TimingType
   activeMs: number
   runningSince: number | null // Date.now() when last resumed; null = paused
-  lastActivity: number
   recorded: boolean
 }
 
 let session: Session | null = null
-let idleInterval: ReturnType<typeof setInterval> | null = null
 let bound = false
 
 function flushRunning(): void {
@@ -47,10 +43,7 @@ export function elapsedMs(): number {
 }
 
 function resume(): void {
-  if (session && session.runningSince === null) {
-    session.runningSince = Date.now()
-    session.lastActivity = Date.now()
-  }
+  if (session && session.runningSince === null) session.runningSince = Date.now()
 }
 
 function onVisibility(): void {
@@ -58,25 +51,11 @@ function onVisibility(): void {
   else resume()
 }
 
-function onActivity(): void {
-  if (!session) return
-  session.lastActivity = Date.now()
-  if (session.runningSince === null && !document.hidden) resume() // un-idle
-}
-
-function checkIdle(): void {
-  if (session && session.runningSince !== null && Date.now() - session.lastActivity > IDLE_MS) {
-    flushRunning() // idle → pause; resumes on next activity
-  }
-}
-
 function bind(): void {
   if (bound || typeof window === 'undefined') return
   bound = true
   document.addEventListener('visibilitychange', onVisibility)
-  for (const e of ACTIVITY_EVENTS) window.addEventListener(e, onActivity, { passive: true })
   window.addEventListener('pagehide', () => stopTimer('nav'))
-  idleInterval = setInterval(checkIdle, 5_000)
 }
 
 // Begin timing a problem. type = 'new' if it had no SRS record when opened,
@@ -85,14 +64,7 @@ export function startTimer(problemId: string, type: TimingType): void {
   if (typeof window === 'undefined') return
   if (session && !session.recorded && session.problemId !== problemId) stopTimer('nav')
   bind()
-  session = {
-    problemId,
-    type,
-    activeMs: 0,
-    runningSince: Date.now(),
-    lastActivity: Date.now(),
-    recorded: false,
-  }
+  session = { problemId, type, activeMs: 0, runningSince: Date.now(), recorded: false }
 }
 
 export function stopTimer(completedVia: TimingRecord['completedVia']): TimingRecord | null {
@@ -116,8 +88,7 @@ export function stopTimer(completedVia: TimingRecord['completedVia']): TimingRec
   return rec
 }
 
-// Manual controls (the header stopwatch pause button). Auto pause/resume from
-// idle + visibility still applies on top of these.
+// Manual controls (the header stopwatch pause button).
 export function isRunning(): boolean {
   return !!session && session.runningSince !== null
 }
@@ -136,7 +107,6 @@ export function restartTimer(): void {
     type: session.type,
     activeMs: 0,
     runningSince: Date.now(),
-    lastActivity: Date.now(),
     recorded: false,
   }
 }
