@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import {
   applyReview,
   clearState,
@@ -24,11 +25,20 @@ const RATINGS: { q: Quality; label: string; tone: string; hint: string }[] = [
   { q: 5, label: 'Easy',   tone: 'bg-cyan-900/30 border-cyan-500/40 hover:bg-cyan-900/50 text-cyan-300',          hint: 'trivial' },
 ]
 
-export function SrsControls({ problemId }: { problemId: string }) {
+export function SrsControls({
+  problemId,
+  siblings = [],
+}: {
+  problemId: string
+  siblings?: { id: string; title: string }[]
+}) {
   const [state, setState] = useState<SrsState | null>(null)
   const [hydrated, setHydrated] = useState(false)
   const [justRated, setJustRated] = useState<Quality | null>(null)
   const [isSkipped, setIsSkipped] = useState(false)
+  // On a struggle (Again/Hard), suggest the next un-mastered same-pattern
+  // problem to cement understanding before moving on.
+  const [cement, setCement] = useState<{ id: string; title: string } | null>(null)
 
   useEffect(() => {
     setState(loadState(problemId))
@@ -66,6 +76,13 @@ export function SrsControls({ problemId }: { problemId: string }) {
     setState(next)
     setJustRated(q)
     fireSameTabRefresh()
+    // Again (0) or Hard (3) = struggled → offer the next un-mastered sibling
+    // to cement. Confident ratings clear any prior suggestion.
+    if (q === 0 || q === 3) {
+      setCement(siblings.find((s) => s.id !== problemId && !loadState(s.id)?.mastered) ?? null)
+    } else {
+      setCement(null)
+    }
   }
 
   const reset = () => {
@@ -198,6 +215,21 @@ export function SrsControls({ problemId }: { problemId: string }) {
           </button>
         )}
       </div>
+
+      {cement && (
+        <div className="rounded-lg border border-indigo-500/40 bg-indigo-900/15 px-4 py-3 flex items-center gap-3">
+          <span className="text-indigo-300 text-sm shrink-0">↻</span>
+          <p className="text-sm text-indigo-200 flex-1">
+            Struggled? Cement it with a same-pattern problem:{' '}
+            <Link
+              href={`/study/${cement.id}`}
+              className="font-medium underline decoration-dotted underline-offset-2 hover:text-indigo-100"
+            >
+              {cement.title} →
+            </Link>
+          </p>
+        </div>
+      )}
 
       <p className="text-[10px] text-[#6c7086]">
         SM-2 spaced repetition. Stored in your browser only.

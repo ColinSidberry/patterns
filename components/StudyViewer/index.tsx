@@ -257,7 +257,7 @@ export function StudyViewer({ entry, prevId, nextId, patternName, siblings, tagS
                 <h3 className="text-[10px] uppercase tracking-wider text-[#6c7086] font-semibold mb-2">
                   Spaced Repetition
                 </h3>
-                <SrsControls problemId={entry.id} />
+                <SrsControls problemId={entry.id} {...(siblings && { siblings })} />
               </div>
 
               <div className="border-t border-[#313244]" />
