@@ -13,6 +13,7 @@ import type { Snapshot } from '@/lib/runner/traceTypes'
 import { useTrace } from './TraceProvider'
 import { CopyButton } from './CopyButton'
 import { buildCopyTemplate } from '@/lib/copyTemplate'
+import { getLineExplanation } from './lineExplanations'
 
 interface Props {
   code: string
@@ -109,6 +110,12 @@ export function SolutionDebugger({ code, problemId, paramNames, slotLabels }: Pr
   const activeLine = current?.line ?? null
   const total = snapshots.length
 
+  // State-aware explanation for the active line, given the current step's vars.
+  const explanation =
+    status.kind === 'ready' && current && activeLine !== null
+      ? getLineExplanation(problemId, activeLine, current.vars)
+      : null
+
   // Bucket pins by line. Function parameters get re-homed to the
   // signature line; everything else stays on the line where it was last
   // assigned (already computed by computePinsPerStep).
@@ -129,6 +136,12 @@ export function SolutionDebugger({ code, problemId, paramNames, slotLabels }: Pr
       activeLine={activeLine}
       pinsByLine={pinsByLine}
     >
+      {explanation && (
+        <div className="px-4 py-2.5 border-t border-[#313244] bg-[#181825] text-[13px] text-[#a6adc8] leading-relaxed">
+          <span className="font-mono text-[11px] text-[#7c7f93] mr-2 select-none">line {activeLine}</span>
+          {explanation}
+        </div>
+      )}
       <div className="px-3 py-2 border-t border-[#313244] bg-[#1e1e2e] flex items-center gap-2 flex-wrap">
         <div className="flex items-center gap-1 flex-wrap">
           {fnTests.map((_, i) => (
