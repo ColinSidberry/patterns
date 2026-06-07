@@ -31,6 +31,17 @@ function isIdentifier(n: Node): boolean {
   return n?.type === 'Identifier'
 }
 
+// Statements that exit the current flow — a snap placed AFTER them is
+// unreachable, so we snap before them instead.
+function isTerminator(stmt: Node): boolean {
+  return (
+    stmt?.type === 'ReturnStatement' ||
+    stmt?.type === 'ThrowStatement' ||
+    stmt?.type === 'BreakStatement' ||
+    stmt?.type === 'ContinueStatement'
+  )
+}
+
 // Walk a binding pattern (Identifier | ArrayPattern | ObjectPattern |
 // AssignmentPattern | RestElement) and collect every identifier name it
 // ultimately binds. Default values, rest-spreads, and nested patterns
@@ -186,6 +197,21 @@ export function instrumentSource(src: string, fnName: string): string {
   function visitBlock(block: Node, parentScope: Set<string>): void {
     const scope = new Set(parentScope)
     for (const stmt of block.body) {
+      // return/throw/break/continue: snap BEFORE the statement — a snap placed
+      // after a control-flow exit is dead code and never fires (so the exit
+      // line would otherwise never highlight). Safe only for direct block
+      // children; a braceless `if (x) return y` consequent isn't one (inserting
+      // a statement before it would detach the return from the if), so those
+      // are left alone. Terminators declare nothing and have no nested block,
+      // so there's nothing else to do for them.
+      if (isTerminator(stmt)) {
+        insertions.push({
+          offset: stmt.start,
+          line: stmt.loc.start.line,
+          vars: [...scope],
+        })
+        continue
+      }
       // Recurse into nested blocks BEFORE adding this statement's
       // declarations to scope (so the recursion sees pre-declaration scope).
       visitStatement(stmt, scope)
