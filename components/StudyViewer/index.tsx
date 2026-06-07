@@ -204,12 +204,18 @@ export function StudyViewer({ entry, prevId, nextId, patternName, siblings, tagS
           >
             <div className="pt-3 flex flex-col gap-6">
               {useTraceProvider ? (
-                <SolutionDebugger
-                  code={entry.solutionJS!}
-                  problemId={entry.id}
-                  {...(entry.paramNames && { paramNames: entry.paramNames })}
-                  {...(slotLabels && { slotLabels })}
-                />
+                // Break the debugger out of the md prose column on wide
+                // screens — the inline var pins make lines long, and the page
+                // has plenty of unused L/R gutter. Capped at viewport width so
+                // it never forces page-level horizontal scroll.
+                <div className="lg:w-[min(1180px,calc(100vw-3rem))] lg:max-w-none lg:relative lg:left-1/2 lg:-translate-x-1/2">
+                  <SolutionDebugger
+                    code={entry.solutionJS!}
+                    problemId={entry.id}
+                    {...(entry.paramNames && { paramNames: entry.paramNames })}
+                    {...(slotLabels && { slotLabels })}
+                  />
+                </div>
               ) : (
                 <CodeBlock code={entry.solutionJS!} />
               )}
