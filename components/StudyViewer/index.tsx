@@ -26,7 +26,6 @@ import { PageStopwatch } from './PageStopwatch'
 import { NotesPanel } from './NotesPanel'
 import { DevNotesInbox } from './DevNotesInbox'
 import { SolutionDebugger } from './SolutionDebugger'
-import { ComparatorTrace } from './ComparatorTrace'
 import { UnderstandViz } from './UnderstandViz'
 import { StudyNav } from './StudyNav'
 import { TraceProvider } from './TraceProvider'
@@ -214,12 +213,6 @@ export function StudyViewer({ entry, prevId, nextId, patternName, siblings, tagS
               ) : (
                 <CodeBlock code={entry.solutionJS!} />
               )}
-
-              <ComparatorTrace
-                solutionJS={entry.solutionJS}
-                entryFunction={entry.entryFunction}
-                testInput={(entry.tests?.[0] as { input?: unknown } | undefined)?.input}
-              />
 
               {/* Complexity, Spaced Repetition, Notes — bucketed under the
                   Reference Solution accordion (no separate fold). */}

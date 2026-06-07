@@ -90,6 +90,60 @@ function collectParamNames(fn: Node): string[] {
   return out
 }
 
+// Generic recursive AST walk — visits every node, skipping location/range
+// bookkeeping keys. Used to find inline callbacks + all declared names
+// anywhere inside the entry function.
+function walkAll(node: Node, visit: (n: Node) => void): void {
+  if (!node || typeof node !== 'object') return
+  if (Array.isArray(node)) {
+    for (const c of node) walkAll(c, visit)
+    return
+  }
+  if (typeof node.type === 'string') visit(node)
+  for (const key in node) {
+    if (key === 'type' || key === 'loc' || key === 'range' || key === 'start' || key === 'end') continue
+    const child = node[key]
+    if (child && typeof child === 'object') walkAll(child, visit)
+  }
+}
+
+// Inline function/arrow expressions passed as call ARGUMENTS (sort/map/filter/
+// reduce/forEach comparators + callbacks). Block-body only — concise arrows
+// (`(a,b) => a-b`) have no statements to snap and are skipped. Named nested
+// helper FunctionDeclarations are intentionally NOT collected (kept out of
+// scope, per the smaller-blast-radius decision).
+function collectInlineCallbacks(root: Node): Node[] {
+  const out: Node[] = []
+  walkAll(root, (n) => {
+    if (n.type !== 'CallExpression') return
+    for (const arg of n.arguments) {
+      if (
+        (arg.type === 'FunctionExpression' || arg.type === 'ArrowFunctionExpression') &&
+        arg.body?.type === 'BlockStatement'
+      ) {
+        out.push(arg)
+      }
+    }
+  })
+  return out
+}
+
+// Every name bound by a var/let/const or function declaration anywhere in the
+// subtree. Used to seed callback scopes generously: a callback can close over
+// any outer name, and over-capturing is harmless (each capture is TDZ-guarded
+// by a try/catch in renderSnap, so names not yet/never in scope just no-op).
+function collectAllDeclaredNames(root: Node): string[] {
+  const out: string[] = []
+  walkAll(root, (n) => {
+    if (n.type === 'VariableDeclaration') {
+      for (const d of n.declarations) collectPatternNames(d.id, out)
+    } else if (n.type === 'FunctionDeclaration' && n.id) {
+      out.push(n.id.name)
+    }
+  })
+  return out
+}
+
 export function instrumentSource(src: string, fnName: string): string {
   let ast: Node
   try {
@@ -224,6 +278,24 @@ export function instrumentSource(src: string, fnName: string): string {
   // Entry function: params are in scope from the first body statement.
   const initialScope = new Set(collectParamNames(target))
   visitBlock(target.body, initialScope)
+
+  // Inline callbacks (sort comparators, map/filter/reduce/forEach callbacks):
+  // instrument each so its body steps inline, just like the entry function.
+  // Their pairwise/iteration calls are otherwise a single invisible step.
+  // Scope = every name declared anywhere in the entry body (closure-visible)
+  // + the callback's own params; visitBlock adds the callback's locals as it
+  // walks. A body-start snap shows the params the moment we enter (mirrors the
+  // loop-body-start snap), so each invocation opens with a/b visible.
+  const outerScope = new Set<string>([
+    ...collectParamNames(target),
+    ...collectAllDeclaredNames(target.body),
+  ])
+  for (const cb of collectInlineCallbacks(target.body)) {
+    const cbScope = new Set(outerScope)
+    collectParamNames(cb).forEach((n) => cbScope.add(n))
+    snapAtBodyStart(cb.body, cbScope)
+    visitBlock(cb.body, cbScope)
+  }
 
   // Append a final snap at the very end of the function body so the user
   // can see the final state right before the function returns implicitly.
