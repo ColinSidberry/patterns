@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import path from "path";
 import { codeToHtml } from "shiki";
@@ -46,17 +45,14 @@ export default async function FilePage({
   const html = await codeToHtml(content, { lang, theme: "catppuccin-mocha" });
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-8">
-      <header className="mb-4 flex items-center gap-3 text-sm">
-        <Link href="/code" className="text-[#89b4fa] hover:underline">
-          ← all files
-        </Link>
-        <span className="font-mono text-[#a6adc8]">{rel}</span>
+    <div>
+      <header className="mb-3">
+        <span className="font-mono text-sm text-[#a6adc8]">{rel}</span>
       </header>
       <div
         className="overflow-x-auto rounded-lg border border-white/10 p-4 text-sm [&_pre]:!bg-transparent"
         dangerouslySetInnerHTML={{ __html: html }}
       />
-    </main>
+    </div>
   );
 }

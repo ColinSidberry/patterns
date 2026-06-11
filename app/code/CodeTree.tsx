@@ -2,19 +2,25 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { TreeNode } from "./tree";
 
-export type TreeNode = {
-  name: string;
-  path?: string; // set on files (full rel path)
-  children?: TreeNode[]; // set on folders
-};
-
-function hrefFor(path: string): string {
+function navHref(path: string): string {
   return `/code/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 
-function Folder({ node, depth }: { node: TreeNode; depth: number }) {
-  const [open, setOpen] = useState(false); // collapsed by default, GitHub-style
+function Folder({
+  node,
+  depth,
+  current,
+}: {
+  node: TreeNode;
+  depth: number;
+  current: string;
+}) {
+  const dirPath = `/code/${node.path}`;
+  const containsActive = current === dirPath || current.startsWith(dirPath + "/");
+  const [open, setOpen] = useState(containsActive); // expand to reveal active file
   return (
     <li>
       <button
@@ -28,7 +34,7 @@ function Folder({ node, depth }: { node: TreeNode; depth: number }) {
       {open && (
         <ul>
           {node.children!.map((c) => (
-            <NodeRow key={c.name} node={c} depth={depth + 1} />
+            <NodeRow key={c.name} node={c} depth={depth + 1} current={current} />
           ))}
         </ul>
       )}
@@ -36,13 +42,26 @@ function Folder({ node, depth }: { node: TreeNode; depth: number }) {
   );
 }
 
-function FileRow({ node, depth }: { node: TreeNode; depth: number }) {
+function FileRow({
+  node,
+  depth,
+  current,
+}: {
+  node: TreeNode;
+  depth: number;
+  current: string;
+}) {
+  const active = current === `/code/${node.path}`;
   return (
     <li>
       <Link
-        href={hrefFor(node.path!)}
+        href={navHref(node.path!)}
         style={{ paddingLeft: depth * 16 + 8 + 18 }}
-        className="flex items-center py-1 pr-2 font-mono text-sm text-[#a6adc8] hover:bg-white/[0.04] hover:text-[#cdd6f4]"
+        className={`flex items-center py-1 pr-2 font-mono text-sm hover:bg-white/[0.04] ${
+          active
+            ? "bg-[#89b4fa]/10 text-[#89b4fa]"
+            : "text-[#a6adc8] hover:text-[#cdd6f4]"
+        }`}
       >
         {node.name}
       </Link>
@@ -50,19 +69,16 @@ function FileRow({ node, depth }: { node: TreeNode; depth: number }) {
   );
 }
 
-function NodeRow({ node, depth }: { node: TreeNode; depth: number }) {
-  return node.children ? (
-    <Folder node={node} depth={depth} />
-  ) : (
-    <FileRow node={node} depth={depth} />
-  );
+function NodeRow(props: { node: TreeNode; depth: number; current: string }) {
+  return props.node.children ? <Folder {...props} /> : <FileRow {...props} />;
 }
 
 export function CodeTree({ tree }: { tree: TreeNode[] }) {
+  const current = decodeURIComponent(usePathname());
   return (
     <ul className="rounded-lg border border-white/10 bg-white/[0.02] py-1">
       {tree.map((n) => (
-        <NodeRow key={n.name} node={n} depth={0} />
+        <NodeRow key={n.name} node={n} depth={0} current={current} />
       ))}
     </ul>
   );
