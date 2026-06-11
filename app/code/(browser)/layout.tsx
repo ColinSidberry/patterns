@@ -16,8 +16,8 @@ export default async function CodeBrowserLayout({
   const tree = buildTree(files);
 
   return (
-    <div className="mx-auto flex max-w-6xl gap-6 px-4 py-6">
-      <aside className="hidden w-72 shrink-0 md:block">
+    <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 py-6 md:grid-cols-[18rem_minmax(0,1fr)]">
+      <aside className="hidden md:block">
         <div className="sticky top-6">
           <Link
             href="/code"
@@ -31,7 +31,7 @@ export default async function CodeBrowserLayout({
           </div>
         </div>
       </aside>
-      <main className="min-w-0 flex-1">{children}</main>
+      <main className="min-w-0">{children}</main>
     </div>
   );
 }
