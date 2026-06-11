@@ -82,6 +82,19 @@ async function fromDisk(): Promise<string[]> {
   return out;
 }
 
+// Skip oversized files: huge data blobs exceed Vercel's prerender/ISR payload
+// limit (build failure) and would make unusable pages anyway.
+const MAX_BYTES = 1024 * 1024; // 1 MB
+
+async function withinSizeLimit(rel: string): Promise<boolean> {
+  try {
+    const st = await fs.stat(path.resolve(ROOT, rel));
+    return st.isFile() && st.size <= MAX_BYTES;
+  } catch {
+    return false;
+  }
+}
+
 let cache: string[] | null = null;
 
 export async function listFiles(): Promise<string[]> {
@@ -90,10 +103,14 @@ export async function listFiles(): Promise<string[]> {
   let files = await fromGit();
   if (files.length === 0) files = await fromDisk();
 
-  const out = files.filter((f) => isRenderable(path.basename(f)));
-  out.sort();
-  cache = out;
-  return out;
+  const renderable = files.filter((f) => isRenderable(path.basename(f)));
+  const sized: string[] = [];
+  for (const f of renderable) {
+    if (await withinSizeLimit(f)) sized.push(f);
+  }
+  sized.sort();
+  cache = sized;
+  return sized;
 }
 
 export async function readFile(rel: string): Promise<string | null> {
