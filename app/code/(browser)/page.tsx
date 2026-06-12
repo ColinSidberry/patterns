@@ -11,19 +11,19 @@ export default async function CodeIndex() {
 
   if (!readmeHtml) {
     return (
-      <p className="text-sm text-[#a6adc8]">
+      <p className="text-sm text-[#7d8590]">
         Select a file from the tree to view its source.
       </p>
     );
   }
 
   return (
-    <section className="overflow-hidden rounded-lg border border-white/10 bg-white/[0.02]">
-      <div className="border-b border-white/10 px-4 py-2 font-mono text-sm text-[#89b4fa]">
+    <section className="overflow-hidden rounded-md border border-[#30363d]">
+      <div className="border-b border-[#30363d] bg-[#161b22] px-4 py-2 text-sm font-semibold text-[#e6edf3]">
         README.md
       </div>
       <div
-        className="prose prose-invert max-w-none px-6 py-5 prose-pre:bg-[#13131a] prose-code:text-[#cdd6f4] prose-a:text-[#89b4fa]"
+        className="prose prose-invert max-w-none bg-[#0d1117] px-6 py-5 prose-headings:border-b prose-headings:border-[#30363d] prose-headings:pb-2 prose-pre:bg-[#161b22] prose-code:text-[#e6edf3] prose-a:text-[#2f81f7]"
         dangerouslySetInnerHTML={{ __html: readmeHtml }}
       />
     </section>

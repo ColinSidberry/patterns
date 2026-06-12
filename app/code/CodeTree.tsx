@@ -26,10 +26,10 @@ function Folder({
       <button
         onClick={() => setOpen((o) => !o)}
         style={{ paddingLeft: depth * 16 + 8 }}
-        className="flex w-full items-center gap-1.5 py-1 pr-2 text-left font-mono text-sm text-[#cdd6f4] hover:bg-white/[0.04]"
+        className="flex w-full items-center gap-1.5 rounded py-1 pr-2 text-left font-mono text-sm text-[#e6edf3] hover:bg-[#161b22]"
       >
-        <span className="w-3 text-[#6c7086]">{open ? "▾" : "▸"}</span>
-        <span className="text-[#89b4fa]">{node.name}/</span>
+        <span className="w-3 text-[#7d8590]">{open ? "▾" : "▸"}</span>
+        <span>{node.name}/</span>
       </button>
       {open && (
         <ul>
@@ -57,10 +57,10 @@ function FileRow({
       <Link
         href={navHref(node.path!)}
         style={{ paddingLeft: depth * 16 + 8 + 18 }}
-        className={`flex items-center py-1 pr-2 font-mono text-sm hover:bg-white/[0.04] ${
+        className={`flex items-center rounded py-1 pr-2 font-mono text-sm hover:bg-[#161b22] ${
           active
-            ? "bg-[#89b4fa]/10 text-[#89b4fa]"
-            : "text-[#a6adc8] hover:text-[#cdd6f4]"
+            ? "bg-[#161b22] text-[#e6edf3]"
+            : "text-[#7d8590] hover:text-[#e6edf3]"
         }`}
       >
         {node.name}
@@ -76,7 +76,7 @@ function NodeRow(props: { node: TreeNode; depth: number; current: string }) {
 export function CodeTree({ tree }: { tree: TreeNode[] }) {
   const current = decodeURIComponent(usePathname());
   return (
-    <ul className="rounded-lg border border-white/10 bg-white/[0.02] py-1">
+    <ul>
       {tree.map((n) => (
         <NodeRow key={n.name} node={n} depth={0} current={current} />
       ))}

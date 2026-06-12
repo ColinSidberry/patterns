@@ -1,7 +1,10 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import path from "path";
 import { codeToHtml } from "shiki";
+import type { ShikiTransformer } from "shiki";
 import { listFiles, readFile } from "@/lib/code-files";
+import { FileBody } from "../../FileBody";
 
 export const dynamic = "force-static";
 
@@ -29,6 +32,40 @@ const LANG: Record<string, string> = {
   ".sh": "bash",
 };
 
+// Add an id (L<n>) and a clickable line-number anchor to every line.
+const lineNumbers: ShikiTransformer = {
+  name: "line-numbers",
+  line(node, line) {
+    node.properties.id = `L${line}`;
+    node.children.unshift({
+      type: "element",
+      tagName: "a",
+      properties: { href: `#L${line}`, class: "ln" },
+      children: [{ type: "text", value: String(line) }],
+    });
+  },
+};
+
+function Breadcrumb({ rel }: { rel: string }) {
+  const segs = rel.split("/");
+  const file = segs.pop()!;
+  return (
+    <nav className="mb-3 font-mono text-sm">
+      <Link href="/code" className="text-[#2f81f7] hover:underline">
+        patterns
+      </Link>
+      {segs.map((s, i) => (
+        <span key={i} className="text-[#7d8590]">
+          {" / "}
+          {s}
+        </span>
+      ))}
+      <span className="text-[#7d8590]">{" / "}</span>
+      <span className="font-semibold text-[#e6edf3]">{file}</span>
+    </nav>
+  );
+}
+
 export default async function FilePage({
   params,
 }: {
@@ -42,17 +79,18 @@ export default async function FilePage({
   if (content == null) notFound();
 
   const lang = LANG[path.extname(rel)] || "text";
-  const html = await codeToHtml(content, { lang, theme: "catppuccin-mocha" });
+  const html = await codeToHtml(content, {
+    lang,
+    theme: "github-dark",
+    transformers: [lineNumbers],
+  });
+  const lines = content.split("\n").length;
+  const bytes = Buffer.byteLength(content, "utf8");
 
   return (
     <div>
-      <header className="mb-3">
-        <span className="font-mono text-sm text-[#a6adc8]">{rel}</span>
-      </header>
-      <div
-        className="overflow-x-auto rounded-lg border border-white/10 p-4 text-sm [&_pre]:!bg-transparent"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <Breadcrumb rel={rel} />
+      <FileBody html={html} raw={content} lines={lines} bytes={bytes} />
     </div>
   );
 }
